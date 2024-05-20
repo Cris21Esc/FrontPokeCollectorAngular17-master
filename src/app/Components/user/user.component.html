@@ -1,0 +1,56 @@
+<body>
+<div class="row mx-0 p-5 text-center">
+  <div class="col">
+    <p class="addpoke text-center ">Añade Pokemos <button class="aqui" (click)="navigatepokemon()">Aqui</button></p>
+  </div>
+  <div class="col" *ngIf="caughtPokemons.length >= 6">
+    <button class="btn" (click)="crearEquipo()">Crear Equipo</button>
+  </div>
+  <div class="col" *ngIf="caughtPokemons.length < 6">
+    <h1>Necesitas al menos 6 pokemon para formar un equipo</h1>
+  </div>
+</div>
+<div class="row mx-0 p-5 d-none" id="crearEquipoDiv">
+  <span id="errorPokes" class="text-success">{{pokesInEquipo.toString()}}/6</span>
+  <label for="nombreEquipoPokemon">Nombre del equipo pokemon:</label>
+  <input type="text" id="nombreEquipoPokemon">
+  <div id="equipoCrear">
+
+  </div>
+  <button class="btn btn-outline-success" *ngIf="pokesInEquipo==6" (click)="guardarEquipo()">Guardar equipo Pokemon</button>
+</div>
+<!--<div class="row mx-0 p-5" *ngIf="equipos.length >= 1">
+  <div class="equipos" *ngFor="let equipo of equipos">
+    <h2>Equipo: {{equipo.nombre}}</h2>
+    <div class="imgsPokes">
+      <img [src]="'/assets/gifs/' + equipo.pokemon1_id + '.gif'" loading="lazy">
+      <img [src]="'/assets/gifs/' + equipo.pokemon2_id + '.gif'" loading="lazy">
+      <img [src]="'/assets/gifs/' + equipo.pokemon3_id + '.gif'" loading="lazy">
+      <img [src]="'/assets/gifs/' + equipo.pokemon4_id + '.gif'" loading="lazy">
+      <img [src]="'/assets/gifs/' + equipo.pokemon5_id + '.gif'" loading="lazy">
+      <img [src]="'/assets/gifs/' + equipo.pokemon6_id + '.gif'" loading="lazy">
+    </div>
+  </div>
+</div>-->
+<div class="pokemon-team">
+  <div class="pokemon-slot" *ngFor="let slot of slotIds; let i = index" [attr.id]="slot">
+      <div class="pokemon-image-container">
+          <img [src]="'/assets/objetos/huebo.png'" alt="Pokémon Egg">
+      </div>
+      <div class="pokemon-placeholder">???</div>
+  </div>
+</div>
+<div class="row mx-0 p-5 fondo">
+  <p class="text-center">Colección de {{ username }}</p>
+  <div class="pokecarta col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3 h-auto" *ngFor="let poke of caughtPokemons">
+    <div class="face front">
+      <img [src]="'/assets/cartas/' + poke + '.jpg'" loading="lazy">
+    </div>
+    <div class="face back">
+      <button class="buttonfree" (click)="deletepokemon(poke.toString())">Liberar</button>
+      <button *ngFor="let equipo of equipos" (click)="addPokeToEquipo(poke,equipo)">Añadir al equipo {{equipo}}</button>
+      
+    </div>
+  </div>
+</div>
+</body>

@@ -1,0 +1,8 @@
+<div class="row p-0 m-0 general">
+  <div class="col text-center text-bg-dark pt-3 pb-4" *ngFor="let link of links" (click)="navigate(link)">
+    <span class="d-flex align-content-center justify-content-center">{{ link }}</span>
+  </div>
+  <div class="col text-center text-bg-dark pt-3 pb-4" *ngIf="isLoggedIn()" (click)="logout()">
+    <span class="d-flex align-content-center justify-content-center">logout</span>
+  </div>
+</div>

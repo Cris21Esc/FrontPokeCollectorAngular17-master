@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h2>Combate</h2>
+      </div>
+      <div class="card-body">
+        <!-- Aquí se mostrará la información del combate, como los turnos, los Pokémon en juego, etc. -->
+        <div class="row">
+          <div class="col-lg-12">
+            <p>Turno actual: 1</p>
+          </div>
+          <div class="col-lg-12">
+            <button *ngFor="let movimiento of movimientos" (click)="sendServerMessage(movimiento.nombre)"
+                    [value]="movimiento.danio"> {{ movimiento.nombre }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header">
+        <h2>Chat</h2>
+      </div>
+      <div class="card-body">
+        <div>
+          <div *ngFor="let message of messages">
+            {{ message.user }}: {{message.message}}
+          </div>
+          <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()">
+          <button (click)="sendMessage()">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

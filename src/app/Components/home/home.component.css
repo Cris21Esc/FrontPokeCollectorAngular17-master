@@ -1,0 +1,75 @@
+.fadeAnim{
+  animation: fadeIn 0.7s ease forwards;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/assets/ttfs/Bitsential.otf');
+}
+
+.container{
+  font-family: CustomFont;
+}
+
+.container {
+  max-width: 80%;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.text{
+  color: #ffcb05;
+
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 2.5em;
+  color: #ffcb05;
+  text-shadow: 1px 1px 2px #2a75bb;
+}
+
+main p {
+  font-size: 1.2em;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+main ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+main ul li {
+  background: #ffcb05;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+main ul li:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+main ul li strong {
+  color: #2a75bb;
+}
+
+main ul li:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+
+.video{
+  width: 100%;
+  height: auto;
+}

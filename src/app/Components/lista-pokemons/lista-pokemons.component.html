@@ -1,0 +1,58 @@
+<div class="row justify-content-center">
+  <div class="col-12 text-center mb-4">
+    <h1><span class="text">POKE</span><span>DEX</span></h1>
+  </div>
+</div>
+
+<div class="row mx-0 p-5 contenedor">
+  <div class="col-xl-12 d-flex justify-content-center">
+    <p class="text-white px-3">Filtrado por tipo</p>
+    <div class="select-container">
+      <select class="custom-select" [(ngModel)]="tipoSeleccionado">
+        <option *ngFor="let tipo of tiposPokemon" [value]="tipo">{{ tipo }}</option>
+      </select>
+      <button class="custom-button" (click)="filtrar()">Filtrar</button>
+    </div>
+  </div>
+  <div class="col-xl-2 col-lg-3 col-md-4 col-sm-6 mb-3 h-auto" *ngFor="let pokemon of pokemons">
+    <div class="pokecarta">
+      <div class="face front">
+        <img [src]="'/assets/cartas/' + pokemon.num_pokedex + '.jpg'" loading="lazy">
+      </div>
+      <div class="face back">
+        <div class="stats">
+          <span class="pokeinfo">{{ getPokemonInfo(pokemon) }}</span>
+          <div class="health-bar">
+            <div class="bar" [style.width.%]="pokemon.hp-15"></div>
+          </div>
+
+          <span class="pokeatk">{{ getPokemonAtk(pokemon) }}</span>
+          <div class="atk-bar">
+            <div class="bar" [style.width.%]="pokemon.atk-15"></div>
+          </div>
+
+          <span class="pokeatk_esp">{{ getPokemonAtkEsp(pokemon) }}</span>
+          <div class="atkesp-bar">
+            <div class="bar" [style.width.%]="pokemon.atk_esp-15"></div>
+          </div>
+
+          <span class="pokedef">{{ getPokemonDef(pokemon) }}</span>
+          <div class="def-bar">
+            <div class="bar" [style.width.%]="pokemon.def-15"></div>
+          </div>
+
+          <span class="pokedef_esp">{{ getPokemonDefEsp(pokemon) }}</span>
+          <div class="defesp-bar">
+            <div class="bar" [style.width.%]="pokemon.def_esp-15"></div>
+          </div>
+
+          <span class="pokevel">{{ getPokemonVel(pokemon) }}</span>
+          <div class="vel-bar">
+            <div class="bar" [style.width.%]="pokemon.vel-15"></div>
+          </div>
+        </div>
+        <img [src]="'/assets/gifs/' + pokemon.num_pokedex + '.gif'" loading="lazy" class="gifs">
+      </div>
+    </div>
+  </div>
+</div>

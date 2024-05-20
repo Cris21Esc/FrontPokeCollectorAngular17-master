@@ -1,0 +1,8 @@
+@font-face {
+    font-family: 'CustomFont';
+    src: url('/assets/ttfs/Bitsential.otf');
+  }
+
+  .general{
+    font-family: CustomFont;
+  }
