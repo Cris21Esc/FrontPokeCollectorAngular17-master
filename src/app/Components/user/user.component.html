@@ -5,12 +5,13 @@
   </div>
   <div class="col" *ngIf="caughtPokemons.length >= 6">
     <button id="crearEquipoButton" class="btn" (click)="crearEquipo()">Crear Equipo</button>
+    <button id="modificarEquipoButton" *ngIf="equiposBack.length!=0" class="btn" (click)="modificarEquipo()">Modificar Equipo</button>
   </div>
   <div class="col" *ngIf="caughtPokemons.length < 6">
     <h1>Necesitas al menos 6 pokemon para formar un equipo</h1>
   </div>
 </div>
-<div class="row mx-0 p-5 d-none" id="crearEquipoDiv">
+<div class="row mx-0 p-5" *ngIf="toggle" id="crearEquipoDiv">
   <span id="errorPokes" class="text-success">{{pokesInEquipo.toString()}}/6</span>
   <label for="nombreEquipoPokemon">Nombre del equipo pokemon:</label>
   <input type="text" id="nombreEquipoPokemon">
@@ -33,11 +34,15 @@
   </div>
 </div>-->
 <div class="pokemon-team">
+  <div class="w-100 text-center" *ngIf="!toggle">
+    <label for="nomEquipo" class="text-white me-3">Nombre del equipo pokemon:</label>
+    <input class="text-center" type="text" id="nomEquipo" readonly>
+  </div>
   <div class="pokemon-slot" *ngFor="let slot of slotIds; let i = index" [attr.id]="slot">
       <div class="pokemon-image-container">
           <img [src]="'/assets/objetos/huebo.png'" alt="Pokémon Egg">
       </div>
-      <div class="pokemon-placeholder">???</div>
+      <div id="pokemonPlaceholder" class="pokemon-placeholder">???</div>
   </div>
 </div>
 <div class="row mx-0 p-5 fondo">
@@ -48,8 +53,7 @@
     </div>
     <div class="face back">
       <button class="buttonfree" (click)="deletepokemon(poke.toString())">Liberar</button>
-      <button (click)="addPokeToEquipo(poke)">Añadir al equipo</button>
-
+      <button *ngIf="toggle" (click)="addPokeToEquipo(poke)">Añadir al equipo</button>
     </div>
   </div>
 </div>
