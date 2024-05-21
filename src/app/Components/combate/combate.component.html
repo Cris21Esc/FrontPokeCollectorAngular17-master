@@ -1,37 +1,53 @@
-<div class="row">
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h2>Combate</h2>
-      </div>
-      <div class="card-body">
-        <!-- Aquí se mostrará la información del combate, como los turnos, los Pokémon en juego, etc. -->
-        <div class="row">
-          <div class="col-lg-12">
-            <p>Turno actual: 1</p>
-          </div>
-          <div class="col-lg-12">
-            <button *ngFor="let movimiento of movimientos" (click)="sendServerMessage(movimiento.nombre)"
-                    [value]="movimiento.danio"> {{ movimiento.nombre }}
-            </button>
+<div class="container-fluid combate-container">
+  <div class="row">
+    <div class="col-lg-8">
+      <div class="card chat-container">
+        <div class="card-header">
+          <h2>Combate</h2>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <p>Turno actual: {{ turno }}</p>
+              <button class="btn" (click)="waitForOpponent()">Comenzar partida</button>
+            </div>
+            <div class="col-lg-12 pokeStageParent">
+              <div class="pokeStage">
+                <div class="personajeUser"></div>
+                <div class="personajeContra"></div>
+              </div>
+            </div>
+            <div class="col-lg-12 p-4 d-flex justify-content-around">
+              <button class="btn" *ngFor="let movimiento of movimientos" (click)="sendServerMessage(movimiento.nombre)"
+                      [value]="movimiento.danio"> {{ movimiento.nombre }}
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header">
-        <h2>Chat</h2>
-      </div>
-      <div class="card-body">
-        <div>
-          <div *ngFor="let message of messages">
-            {{ message.user }}: {{message.message}}
+    <div class="col-lg-4 d-flex justify-content-around">
+      <div>
+        <div class="chat-container">
+          <div class="card">
+            <div class="card-header">
+              Sala: {{ roomId ? roomId : 'Seleccione una sala' }}
+            </div>
+            <div class="card-body messages">
+              <div *ngFor="let msg of messages" class="message">
+                <strong>{{ msg.userId }}:</strong> {{ msg.message }}
+              </div>
+            </div>
+            <div class="card-footer">
+              <div class="input-group">
+                <input type="text" class="form-control" [(ngModel)]="message" (keyup.enter)="sendMessage()" placeholder="Escribe un mensaje...">
+                <button class="btn btn-primary" (click)="sendMessage()">Enviar</button>
+              </div>
+            </div>
           </div>
-          <input type="text" [(ngModel)]="message" (keyup.enter)="sendMessage()">
-          <button (click)="sendMessage()">Enviar</button>
         </div>
+      </div>
+      <div>
       </div>
     </div>
   </div>

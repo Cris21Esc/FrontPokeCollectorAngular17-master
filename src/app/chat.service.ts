@@ -9,30 +9,77 @@ export class ChatService {
   private socket: Socket;
 
   constructor() {
-    // Inicializamos el socket con la URL del servidor
     this.socket = io('http://localhost:3000', {
-      withCredentials: true, // Habilitamos las credenciales CORS si es necesario
+      withCredentials: true,
     });
   }
 
-  sendMessage(message: string | undefined, user: string | null): void {
-    const data = { user, message }; // Creamos un objeto con las propiedades user y message
-    this.socket.emit('new-message', data); // Enviamos el objeto directamente
+  sendMessage(userId: string | null, message: string | undefined, room: string | null): void {
+    const data = { userId, message, room };
+    this.socket.emit('message', data);
   }
 
-  sendServerMessage(message: string, user: string | null): void{
-    const data = { user, message }; // Creamos un objeto con las propiedades user y message
-    this.socket.emit('new-message', data)
+  sendServerMessage(room: string, message: string): void {
+    const data = { userId:"servidor",message,room };
+    this.socket.emit('message', data);
   }
 
-  getMessages(): Observable<{ user: string, message: string }> {
-    return new Observable<{ user: string, message: string }>(observer => {
-      this.socket.on('new-message', (data: { user: string, message: string }) => {
+  getMessages(room: string): Observable<{ userId: string, message: string, room: string }> {
+    return new Observable<{ userId: string, message: string, room: string }>(observer => {
+      this.socket.on('message', (data: { userId: string, message: string, room: string }) => {
         observer.next(data);
       });
+
       return () => {
-        this.socket.disconnect();
+        this.socket.off('message');
       };
     });
   }
+
+  requestLastMessages(room: string, count: number): Observable<{ userId: string, message: string, room: string }> {
+    return new Observable<{ userId: string, message: string, room: string }>(observer => {
+      this.socket.emit('request-last-messages', { room, count });
+
+      this.socket.on('last-messages', (messages: { userId: string, message: string, room: string }[]) => {
+        messages.forEach(message=>{
+          observer.next(message);
+        })
+      });
+    });
+  }
+
+  getRooms(): Observable<string[]> {
+    return new Observable<string[]>(observer => {
+      this.socket.off('rooms');
+
+      this.socket.on('rooms', (rooms: string[]) => {
+        observer.next(rooms);
+      });
+
+      return () => {
+        this.socket.off('rooms');
+      };
+    });
+  }
+
+  joinRoom(roomId: string, userId: string): void {
+    this.socket.emit('join-room', roomId, userId);
+  }
+
+  leaveRoom(): void {
+    this.socket.emit('leave-room');
+  }
+
+  requestRooms(): void {
+    this.socket.emit('request-rooms');
+  }
+
+  waitForOpponent(userId: string) {
+    this.socket.emit('find-opponent', userId);
+  }
+
+  onFoundOpponent(callback: (data: any) => void) {
+    this.socket.on('found-opponent', callback);
+  }
+
 }

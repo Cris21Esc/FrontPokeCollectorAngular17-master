@@ -1,0 +1,57 @@
+.pokeStage{
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  background-size: 100% 100%;
+  height: 100%;
+  background-image: url("/assets/k/combatStage.png");
+  background-repeat: no-repeat;
+}
+.pokeStageParent{
+height: 450px;
+}
+button{
+  border-radius: 10px;
+  background:#4B6387;
+  color:#fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all .5s;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.2);
+}
+
+button:hover{
+  transition: all .5s;
+  transform: rotate(-3deg) scale(1.1);
+  box-shadow: 0px 3px 5px rgba(0,0,0,.4);
+}
+
+.personajeUser{
+  position: absolute;
+  top: 56%;
+  left: 10vw;
+  height:200px;
+  width: 200px;
+  background-repeat: no-repeat;
+  background-image: url("/assets/pjs/pjs.png");
+  background-position: -4px -4px;
+  background-size: 550%;
+}
+.personajeContra{
+  position: absolute;
+  top: 50px;
+  right: 10vw;
+  height:200px;
+  width: 200px;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/enemy.png");
+  background-position: 2px 1px;
+  background-size: 300%;
+}
+
+@media screen and (max-width: 576px){
+  .personajeContra{
+    right:5vw;
+  }
+}
