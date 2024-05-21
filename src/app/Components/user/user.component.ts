@@ -27,7 +27,7 @@ export class UserComponent implements OnInit {
   equipoCrear:number|undefined;
   numEquipos:number=1;
   equiposBack:EquipoPokemon[]=[];
-  equipos:number[] = [];
+  equipos:number = 1;
   pokesInEquipo: number = 0;
   pokesArray: number[] =[];
   private maxPokes: number = 6;
@@ -45,9 +45,24 @@ export class UserComponent implements OnInit {
         this.iduser=userId;
         this.servicepokemons.findAllEquiposByUserId(userId).subscribe(data=>{
           console.log(data);
-          data.forEach(equipo=>{
-            this.equiposBack.push(equipo);
-          });
+          if(data.length>=1){
+            data.forEach(equipo=>{
+              this.equiposBack.push(equipo);
+              this.equiposBack.forEach(equipo=>{
+                this.addPokeToEquipo(equipo.pokemon1_id.toString());
+                this.addPokeToEquipo(equipo.pokemon2_id.toString());
+                this.addPokeToEquipo(equipo.pokemon3_id.toString());
+                this.addPokeToEquipo(equipo.pokemon4_id.toString());
+                this.addPokeToEquipo(equipo.pokemon5_id.toString());
+                this.addPokeToEquipo(equipo.pokemon6_id.toString());
+              });
+            });
+            // @ts-ignore
+            /*document.getElementById('crearEquipoButton').disabled = true;*/
+          }else{
+            // @ts-ignore
+            document.getElementById('crearEquipoButton').disabled = false;
+          }
         });
       });
   }
@@ -81,11 +96,11 @@ export class UserComponent implements OnInit {
       })
   }
 
-  addPokeToEquipo(poke: string, num: any) {
+  addPokeToEquipo(poke: string) {
     if (this.pokesInEquipo < this.maxPokes) {
       this.pokesInEquipo++;
       this.pokesArray.push(parseInt(poke));
-      
+
       // Encontrar el primer slot disponible
       for (let i = 0; i < this.maxPokes; i++) {
           let slotId = this.slotIds[i];
@@ -93,7 +108,7 @@ export class UserComponent implements OnInit {
           if (slotImg && slotImg.src.includes("huebo.png")) {
               // Cambiar la fuente de la imagen del Pokémon
               slotImg.src = `/assets/OnBattle/${poke}.gif`;
-              
+
               // Agregar un event listener para eliminar la imagen
               slotImg.addEventListener("click", () => {
                   this.remove(slotImg);
@@ -123,6 +138,8 @@ export class UserComponent implements OnInit {
     equipo.pokemon6_id = this.pokesArray[5];
     console.log(equipo);
     this.serviceUser.guardarTeam(equipo).subscribe((message)=>{
+      // @ts-ignore
+      document.getElementById("crearEquipoDiv").classList.add("d-none");
       console.log(message.message);
     });
   }
@@ -130,11 +147,10 @@ export class UserComponent implements OnInit {
   crearEquipo() {
     // @ts-ignore
     document.getElementById("crearEquipoDiv").classList.remove("d-none");
-    this.equipos.push(this.numEquipos++);
     this.equipoCrear = this.numEquipos;
   }
   remove(img: HTMLImageElement) {
-    img.src = "/assets/objetos/huebo.png"; 
+    img.src = "/assets/objetos/huebo.png";
     this.pokesInEquipo--;
 }
 }

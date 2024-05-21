@@ -4,7 +4,7 @@
     <p class="addpoke text-center ">Añade Pokemos <button class="aqui" (click)="navigatepokemon()">Aqui</button></p>
   </div>
   <div class="col" *ngIf="caughtPokemons.length >= 6">
-    <button class="btn" (click)="crearEquipo()">Crear Equipo</button>
+    <button id="crearEquipoButton" class="btn" (click)="crearEquipo()">Crear Equipo</button>
   </div>
   <div class="col" *ngIf="caughtPokemons.length < 6">
     <h1>Necesitas al menos 6 pokemon para formar un equipo</h1>
@@ -48,8 +48,8 @@
     </div>
     <div class="face back">
       <button class="buttonfree" (click)="deletepokemon(poke.toString())">Liberar</button>
-      <button *ngFor="let equipo of equipos" (click)="addPokeToEquipo(poke,equipo)">Añadir al equipo {{equipo}}</button>
-      
+      <button (click)="addPokeToEquipo(poke)">Añadir al equipo</button>
+
     </div>
   </div>
 </div>
