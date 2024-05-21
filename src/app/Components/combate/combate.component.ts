@@ -4,6 +4,7 @@ import { ServicepokemonsService } from '../../service-pokemons.service';
 import { Movimiento } from '../../movimiento';
 import { Subscription } from 'rxjs';
 import { EquipoPokemon } from '../../equipo-pokemon';
+import { Pokemon } from '../../pokemon';
 
 @Component({
   selector: 'app-combate',
@@ -11,8 +12,9 @@ import { EquipoPokemon } from '../../equipo-pokemon';
   styleUrls: ['./combate.component.css']
 })
 export class CombateComponent implements OnInit, OnDestroy {
+  pokeActivo:Pokemon|null = null;
   audioPlayer: HTMLAudioElement | null = null;
-  equiposBack: EquipoPokemon | undefined;
+  equipoActivo:Pokemon[]|null=[];
   turno: number | undefined;
   idPokeActivo: number | undefined;
   serverMessage: string | undefined;
@@ -32,6 +34,43 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
       this.movimientos = data;
     });    
+    this.servicePokemon.findUserIdByNombre(sessionStorage.getItem('user')).subscribe(
+      (userId) => {
+        this.servicePokemon.findAllEquiposByUserId(userId).subscribe(data => {
+          data.forEach(equipo=>{
+            this.servicePokemon.findpokemonbyid(equipo.pokemon1_id.toString()).subscribe(
+              (response) => {
+                // @ts-ignore
+                this.equipoActivo.push(response);
+                this.servicePokemon.findpokemonbyid(equipo.pokemon2_id.toString()).subscribe(
+                  (response) => {
+                    // @ts-ignore
+                    this.equipoActivo.push(response);
+                    this.servicePokemon.findpokemonbyid(equipo.pokemon3_id.toString()).subscribe(
+                      (response) => {
+                        // @ts-ignore
+                        this.equipoActivo.push(response);
+                        this.servicePokemon.findpokemonbyid(equipo.pokemon4_id.toString()).subscribe(
+                          (response) => {
+                            // @ts-ignore
+                            this.equipoActivo.push(response);
+                            this.servicePokemon.findpokemonbyid(equipo.pokemon5_id.toString()).subscribe(
+                              (response) => {
+                                // @ts-ignore
+                                this.equipoActivo.push(response);
+                                this.servicePokemon.findpokemonbyid(equipo.pokemon6_id.toString()).subscribe(
+                                  (response) => {
+                                    // @ts-ignore
+                                    this.equipoActivo.push(response);                           
+                                  });
+                              });
+                          });
+                      });
+                  });
+              });
+          });
+        });
+    });
     const audioElement = document.querySelector('audio');
     if (audioElement instanceof HTMLAudioElement) {
       this.audioPlayer = audioElement;
@@ -59,28 +98,13 @@ export class CombateComponent implements OnInit, OnDestroy {
   }
 
   waitForOpponent() {
-    if (this.userId != null) {
-      this.servicePokemon.findUserIdByNombre(sessionStorage.getItem('user')).subscribe(
-        (userId) => {
-          this.userId = userId.toString();
-          this.servicePokemon.findAllEquiposByUserId(parseInt(this.userId)).subscribe(data => {
-            if (data.length >= 1) {
-              data.forEach(equipo => {
-                this.equiposBack = equipo;
-                console.log(this.equiposBack);
-              });
-            }
-          });
-          this.userId = sessionStorage.getItem('user');
-          // @ts-ignore
-          this.chatService.waitForOpponent(this.userId);
-          this.chatService.onFoundOpponent((data: any) => {
-            console.log('Combate encontrado', data);
-            this.joinRoom(data.roomId);
-          });
-        }
-      );
-    }
+    this.userId = sessionStorage.getItem('user');
+    // @ts-ignore
+    this.chatService.waitForOpponent(this.userId);
+    this.chatService.onFoundOpponent((data: any) => {
+      console.log('Combate encontrado', data);
+      this.joinRoom(data.roomId);
+    });
   }
 
   joinRoom(room: string) {    
@@ -89,11 +113,13 @@ export class CombateComponent implements OnInit, OnDestroy {
       this.audioPlayer.src = newAudioSrc;
       this.audioPlayer.load();
       this.audioPlayer.play();
-    }
+    }      
     setTimeout(()=>{
       this.addAnimations2();
     },750);
     this.cleanupSubscriptions();
+    // @ts-ignore
+    this.pokeActivo = this.equipoActivo[0];
     if (this.userId) {
       this.chatService.joinRoom(room, this.userId);
       this.roomId = room;
@@ -153,10 +179,10 @@ export class CombateComponent implements OnInit, OnDestroy {
     const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
     if (fondoCombate) {
-      fondoCombate.style.animation = 'fadeIntoCombat 5s linear';
+      fondoCombate.style.animation = 'fadeIntoCombat 4s linear';
       setTimeout(()=>{
-        fondoCombate.style.opacity = "0%";
-      },5000);
+        fondoCombate.style.display = "none";
+      },4000);
     }
     if (spriteUser) {
       spriteUser.style.animation = 'moverSpriteUser 0.2s linear';

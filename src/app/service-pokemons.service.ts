@@ -93,10 +93,8 @@ export class ServicepokemonsService {
     return this.httpClient.get<Movimiento[]>(`${this.baseURL}/movimientos/`+id)
   }
 
-  findAllEquiposByUserId(userId: number):Observable<EquipoPokemon[]> {
-    let algo = this.httpClient.get<EquipoPokemon[]>(`${this.baseURL}/getAllEquipos/`+userId)
-    console.log(algo);
-    return this.httpClient.get<EquipoPokemon[]>(`${this.baseURL}/getAllEquipos/`+userId)
+  findAllEquiposByUserId(userId: number):Observable<EquipoPokemon[]> {    
+    return this.httpClient.get<EquipoPokemon[]>(`${this.baseURL}/getAllEquipos/`+userId);
   }
 
 }

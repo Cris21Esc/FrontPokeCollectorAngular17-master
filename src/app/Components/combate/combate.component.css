@@ -84,6 +84,24 @@ button:hover{
   background-image: url('/assets/pjs/frontSpriteUser.png');
 }
 
+.pokeInfoUser{
+  position: absolute;
+  width: 450px;
+  height:150px;
+  bottom: 10px;
+  right: 10px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url('/assets/k/barraPokeUser.png');
+}
+
+.pokeInfoUser .general{
+  position: relative;
+  text-align: center;
+  width: 100%;
+  font-size: large;
+  top: 30px;
+}
 .vs{
   position: absolute;
   top: 40%;  
@@ -118,6 +136,25 @@ button:hover{
   background-size: contain;
   z-index: 3;
   background-image: url('/assets/pjs/frontSpriteContra.png');
+}
+
+.pokeInfoContra{
+  position: absolute;
+  width: 450px;
+  height:150px;
+  top: 10px;
+  left: 10px;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url('/assets/k/barraPokeEnemiga.png');
+}
+
+.pokeInfoContra .general{
+  position: relative;
+  text-align: center;
+  width: 90%;
+  font-size: large;
+  top: 30px;
 }
 
 .linea{

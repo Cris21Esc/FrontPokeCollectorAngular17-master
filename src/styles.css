@@ -3,6 +3,16 @@
 html{
   background-color: #212529;
 }
+
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/assets/ttfs/Bitsential.otf');
+}
+
+.general{
+  font-family: CustomFont;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
