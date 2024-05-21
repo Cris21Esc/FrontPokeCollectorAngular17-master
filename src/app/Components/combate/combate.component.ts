@@ -11,6 +11,7 @@ import { EquipoPokemon } from '../../equipo-pokemon';
   styleUrls: ['./combate.component.css']
 })
 export class CombateComponent implements OnInit, OnDestroy {
+  audioPlayer: HTMLAudioElement | null = null;
   equiposBack: EquipoPokemon | undefined;
   turno: number | undefined;
   idPokeActivo: number | undefined;
@@ -30,7 +31,12 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.idPokeActivo = 1;
     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
       this.movimientos = data;
-    });
+    });    
+    const audioElement = document.querySelector('audio');
+    if (audioElement instanceof HTMLAudioElement) {
+      this.audioPlayer = audioElement;
+    }  
+    this.addAnimations();
   }
 
   ngOnDestroy() {
@@ -77,7 +83,16 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
   }
 
-  joinRoom(room: string) {
+  joinRoom(room: string) {    
+    const newAudioSrc = '/assets/sonidos/combate.mp3';
+    if (this.audioPlayer) {
+      this.audioPlayer.src = newAudioSrc;
+      this.audioPlayer.load();
+      this.audioPlayer.play();
+    }
+    setTimeout(()=>{
+      this.addAnimations2();
+    },750);
     this.cleanupSubscriptions();
     if (this.userId) {
       this.chatService.joinRoom(room, this.userId);
@@ -96,6 +111,85 @@ export class CombateComponent implements OnInit, OnDestroy {
       console.log(this.messages);
     }
   }
+
+  addAnimations() {
+    const spriteUser = document.querySelector('.spriteUser') as HTMLDivElement;
+    const pjUser = document.querySelector('.pjUser') as HTMLDivElement;
+    const vs = document.querySelector('.vs') as HTMLDivElement;
+    const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
+    const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
+    if (spriteUser) {
+      spriteUser.style.width = '175%';
+    }
+    if (pjUser) {
+      pjUser.style.left = '40%';
+    }
+    if (vs) {
+      vs.style.left = '10000px';
+    }
+    if (spriteContra) {
+      spriteContra.style.right = '10000px';
+    }
+    if (pjContra) {
+      pjContra.style.left = '10000px';
+    }
+    const flashes = document.querySelectorAll('.flash1, .flash2, .flash3, .flash4, .flash5, .flash6');
+    flashes.forEach((flash, index) => {
+      const htmlFlash = flash as HTMLElement; // Casting a HTMLElement
+      htmlFlash.style.animation = 'none';
+      htmlFlash.offsetHeight; // Fuerza el reflujo
+      const durations = ['0.65s', '0.35s', '0.75s', '1s', '1.25s', '0.75s'];
+      htmlFlash.style.animation = `moveFlashes ${durations[index]} linear infinite`;
+    });
+  }
+  
+  
+
+  addAnimations2() {
+    const fondoCombate = document.querySelector('.fondoCombate') as HTMLDivElement;
+    const spriteUser = document.querySelector('.spriteUser') as HTMLDivElement;
+    const pjUser = document.querySelector('.pjUser') as HTMLDivElement;
+    const vs = document.querySelector('.vs') as HTMLDivElement;
+    const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
+    const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
+    if (fondoCombate) {
+      fondoCombate.style.animation = 'fadeIntoCombat 5s linear';
+      setTimeout(()=>{
+        fondoCombate.style.opacity = "0%";
+      },5000);
+    }
+    if (spriteUser) {
+      spriteUser.style.animation = 'moverSpriteUser 0.2s linear';
+      setTimeout(()=>{
+        spriteUser.style.width = "70%";
+      },200);
+    }
+    if (pjUser) {
+      pjUser.style.animation = 'moverPjUser 0.2s linear';
+      setTimeout(()=>{
+        pjUser.style.left = "8%";
+      },200);
+    }
+    if (vs) {
+      vs.style.animation = 'enterVs 0.2s linear';
+      setTimeout(()=>{
+        vs.style.left = "42%";
+      },200);
+    }
+    if (spriteContra) {
+      spriteContra.style.animation = 'enterSpriteContra 0.2s linear';
+      setTimeout(()=>{
+        spriteContra.style.right = "-15%";
+      },200);
+    }
+    if (pjContra) {
+      pjContra.style.animation = 'enterPjContra 0.2s linear';
+      setTimeout(()=>{
+        pjContra.style.left = "65%";
+      },200);
+    }
+  }
+  
 
   cleanupSubscriptions() {
     if (this.messagesSubscription) {

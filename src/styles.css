@@ -14,3 +14,45 @@ html{
     transform: translateY(0);
   }
 }
+
+@keyframes moveFlashes{
+  0%   {left: 1500px;}
+  100% {left: -100px;}
+}
+
+@keyframes enterVs {
+  0%   {left: 1000px;}
+  100% {left: 42%;}
+}
+
+@keyframes enterSpriteContra {
+  0%   {right: 1000px;}
+  100% {right: -15%;}
+}
+
+@keyframes enterPjContra {
+  0%   {left: 1000px;}
+  100% {left: 65%;}
+}
+
+@keyframes moverSpriteUser {
+  0%   {width: 175%;}
+  100% {width: 70%;}
+}
+
+@keyframes moverPjUser {
+  0%   {left: 40%;}
+  100% {left: 8%;}
+}
+
+@keyframes fadeIntoCombat {
+  0%   {opacity: 100%;}
+  70%  {opacity: 100%;}
+  100% {opacity: 0%;}
+}
+
+@media screen and (max-width: 576px){
+  .personajeContra{
+    right:5vw;
+  }
+}
