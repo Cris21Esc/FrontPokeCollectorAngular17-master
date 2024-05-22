@@ -36,21 +36,21 @@ export class ServiceusersService {
   }
   setAuthToken(token: string): void {
     this.authToken = token;
-    sessionStorage.setItem('token', token);
+    localStorage.setItem('token', token);
   }
 
   getAuthToken(): string | null {
     if (!this.authToken) {
-      this.authToken = sessionStorage.getItem('token');
+      this.authToken = localStorage.getItem('token');
     }
     return this.authToken;
   }
 
   logout(): void {
     this.authToken = null;
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('primerPoke');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('primerPoke');
     this.isLoggedInSubject.next(false);
   }
 

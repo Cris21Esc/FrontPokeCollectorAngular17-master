@@ -22,7 +22,7 @@ export class MenuPrincipalComponent implements OnInit {
     });
   }
   isLoggedIn(){
-    if (sessionStorage.getItem('user') != null) {
+    if (localStorage.getItem('user') != null) {
       return true;
     } else {
       return false;
@@ -35,7 +35,7 @@ export class MenuPrincipalComponent implements OnInit {
   }
 
   updateLinks() {
-    if (sessionStorage.getItem('user') != null && sessionStorage.getItem("token") != null) {
+    if (localStorage.getItem('user') != null && localStorage.getItem("token") != null) {
       this.links = ['inicio', 'pokedex','user','pokemon','combate']; // Menús cuando el usuario está conectado
     } else {
       this.links = ['inicio', 'login','register']; // Menús cuando el usuario no está conectado

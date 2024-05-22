@@ -24,7 +24,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.random();
-    const pokemonstrado = sessionStorage.getItem('primerPoke');
+    const pokemonstrado = localStorage.getItem('primerPoke');
     if (pokemonstrado) {
       this.primerPoke = true;
     }
@@ -39,8 +39,8 @@ export class LoginComponent implements OnInit {
       response => {
         this.redireccion=true;
         if(this.redireccion===true){
-          sessionStorage.setItem('token', response.token);
-          sessionStorage.setItem('user', response.nombre);
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', response.nombre);
           this.router.navigate(["/user"]);
           }
           this.userService.handleLogin(response)
@@ -62,7 +62,7 @@ export class LoginComponent implements OnInit {
     
     // Marcar que ya se ha mostrado el mensaje por primera vez
     this.primerPoke = true;
-    sessionStorage.setItem('primerPoke', 'true');
+    localStorage.setItem('primerPoke', 'true');
   }
 
 }

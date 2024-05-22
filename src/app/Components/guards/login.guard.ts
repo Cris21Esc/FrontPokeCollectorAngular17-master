@@ -6,7 +6,7 @@ export const loginGuard = ()=>{
 
     const router=inject(Router);
 
-        if(sessionStorage.getItem('token')){
+        if(localStorage.getItem('token')){
             return true;
         }
         else{

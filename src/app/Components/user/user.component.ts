@@ -37,11 +37,11 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.token = sessionStorage.getItem('token');
+    this.token = localStorage.getItem('token');
     this.userInfo = this.servicepokemons.getUserInfo();
-    this.username = sessionStorage.getItem('user');
+    this.username = localStorage.getItem('user');
     this.showpokes(this.username)
-    this.servicepokemons.findUserIdByNombre(sessionStorage.getItem('user')).subscribe(
+    this.servicepokemons.findUserIdByNombre(localStorage.getItem('user')).subscribe(
       (userId) => {
         this.iduser = userId;
         this.servicepokemons.findAllEquiposByUserId(userId).subscribe(data => {

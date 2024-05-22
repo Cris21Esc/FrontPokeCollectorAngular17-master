@@ -22,7 +22,7 @@ export class CombateComponent implements OnInit, OnDestroy {
   messages: { userId: string; message: string; room: string; }[] = [];
   protected movimientos: Movimiento[] | undefined;
   roomId: string = '';
-  userId: string | null = sessionStorage.getItem("user");
+  userId: string | null = localStorage.getItem("user");
   private messagesSubscription: Subscription | undefined;
   private lastMessagesSubscription: Subscription | undefined;
   lastMessagesCount: number = 10;
@@ -34,7 +34,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
       this.movimientos = data;
     });    
-    this.servicePokemon.findUserIdByNombre(sessionStorage.getItem('user')).subscribe(
+    this.servicePokemon.findUserIdByNombre(localStorage.getItem('user')).subscribe(
       (userId) => {
         this.servicePokemon.findAllEquiposByUserId(userId).subscribe(data => {
           data.forEach(equipo=>{
@@ -85,7 +85,7 @@ export class CombateComponent implements OnInit, OnDestroy {
 
   sendMessage() {
     if (this.message && this.userId && this.roomId) {
-      this.chatService.sendMessage(sessionStorage.getItem('user'), this.message, this.roomId);
+      this.chatService.sendMessage(localStorage.getItem('user'), this.message, this.roomId);
       this.message = '';
     }
   }
@@ -98,7 +98,7 @@ export class CombateComponent implements OnInit, OnDestroy {
   }
 
   waitForOpponent() {
-    this.userId = sessionStorage.getItem('user');
+    this.userId = localStorage.getItem('user');
     // @ts-ignore
     this.chatService.waitForOpponent(this.userId);
     this.chatService.onFoundOpponent((data: any) => {

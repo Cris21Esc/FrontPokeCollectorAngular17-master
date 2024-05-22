@@ -20,7 +20,7 @@ export class PokemonComponent implements OnInit, AfterViewInit {
   token: string | null = null;
   userinfo: any;
   id: string = "";
-  user = sessionStorage.getItem("token");
+  user = localStorage.getItem("token");
   successMessage: string | null = null;
   errorMessage: string | null = null;
   userid: any;
@@ -58,10 +58,10 @@ export class PokemonComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.token = sessionStorage.getItem("token");
+    this.token = localStorage.getItem("token");
     this.userinfo = this.serviceUser.getUserInfo();
-    console.log(sessionStorage.getItem('user'));
-    this.findid(sessionStorage.getItem('user'));
+    console.log(localStorage.getItem('user'));
+    this.findid(localStorage.getItem('user'));
     this.pokeongrass();
     const audioElement = document.querySelector('audio');
     if (audioElement instanceof HTMLAudioElement) {
