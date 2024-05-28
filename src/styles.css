@@ -61,6 +61,10 @@ html{
   100% {opacity: 0%;}
 }
 
+@keyframes moverPjUserOut {
+
+}
+
 @media screen and (max-width: 576px){
   .personajeContra{
     right:5vw;
