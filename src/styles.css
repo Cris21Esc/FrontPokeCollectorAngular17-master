@@ -2,7 +2,7 @@
 @import "bootstrap/dist/css/bootstrap.css";
 html{
   background-color: #212529;
-  min-width: 500px;
+  min-width: 400px;
 }
 
 @font-face {
@@ -38,7 +38,7 @@ html{
 
 @keyframes enterSpriteContra {
   0%   {right: 1000px;}
-  100% {right: -15%;}
+  100% {right: -40%;}
 }
 
 @keyframes enterPjContra {

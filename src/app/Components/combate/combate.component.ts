@@ -198,7 +198,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     if (spriteContra) {
       spriteContra.style.animation = 'enterSpriteContra 0.2s linear';
       setTimeout(()=>{
-        spriteContra.style.right = "-15%";
+        spriteContra.style.right = "-40%";
       },200);
     }
     if (pjContra) {

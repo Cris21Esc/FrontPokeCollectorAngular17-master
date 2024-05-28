@@ -1,4 +1,4 @@
-.pokeStage{
+/* .pokeStage{
   border-radius: 10px;
   overflow: hidden;
   position: relative;
@@ -232,4 +232,94 @@ button:hover{
 .personajeContra{
   top:2vw;
 }
+}
+ */
+
+ .pokeStageParent{
+  height: 400px;
+}
+
+.pokeStage{
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(20,1fr);
+  grid-template-rows: repeat(20,1fr);  
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  background-size: 100% 100%;
+  background-image: url("/assets/k/combatStage.png");
+  background-repeat: no-repeat;
+  z-index: 0;
+}
+/* intro Vs*/
+.fondoCombate{
+  grid-area: 1/1/21/21;
+  display: grid;
+  position: relative;
+  grid-template-columns: repeat(20,1fr);
+  grid-template-rows: repeat(20,1fr); 
+  background-color: gray;
+  z-index: 1;
+}
+
+.spriteUser{
+  position: relative;
+  grid-area: 6/1/16/21;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("/assets/k/spriteUser.png");
+}
+.spriteContra{
+  position: relative;
+  grid-area: 6/1/16/21;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-image: url("/assets/k/spriteContra.png");
+  z-index: 3;
+}
+
+/*Combate*/
+.personajeUser{
+  grid-area: 13/5/21/8;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/pjs/user.png");
+}
+
+.personajeContra{
+  grid-area: 4/15/12/17;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/pjs/enemy.png");
+}
+
+.pokeInfoUser{
+  grid-area: 15/10/21/21;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/barraPokeUser.png");
+}
+.pokeInfoContra{
+  grid-area: 1/1/7/12;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/barraPokeEnemiga.png");
+}
+
+button{
+  border-radius: 10px;
+  background:#4B6387;
+  color:#fff;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all .5s;
+  box-shadow: 0px 1px 2px rgba(0,0,0,.2);
+}
+
+button:hover{
+  transition: all .5s;
+  transform: rotate(-3deg) scale(1.1);
+  box-shadow: 0px 3px 5px rgba(0,0,0,.4);
 }
