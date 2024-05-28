@@ -2,6 +2,7 @@
 @import "bootstrap/dist/css/bootstrap.css";
 html{
   background-color: #212529;
+  min-width: 500px;
 }
 
 @font-face {
@@ -45,11 +46,6 @@ html{
   100% {left: 65%;}
 }
 
-@keyframes moverSpriteUser {
-  0%   {width: 175%;}
-  100% {width: 70%;}
-}
-
 @keyframes moverPjUser {
   0%   {left: 40%;}
   100% {left: 8%;}
@@ -65,8 +61,3 @@ html{
 
 }
 
-@media screen and (max-width: 576px){
-  .personajeContra{
-    right:5vw;
-  }
-}

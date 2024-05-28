@@ -33,7 +33,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.idPokeActivo = 1;
     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
       this.movimientos = data;
-    });    
+    });
     this.servicePokemon.findUserIdByNombre(localStorage.getItem('user')).subscribe(
       (userId) => {
         this.servicePokemon.findAllEquiposByUserId(userId).subscribe(data => {
@@ -61,7 +61,7 @@ export class CombateComponent implements OnInit, OnDestroy {
                                 this.servicePokemon.findpokemonbyid(equipo.pokemon6_id.toString()).subscribe(
                                   (response) => {
                                     // @ts-ignore
-                                    this.equipoActivo.push(response);                           
+                                    this.equipoActivo.push(response);
                                   });
                               });
                           });
@@ -74,7 +74,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     const audioElement = document.querySelector('audio');
     if (audioElement instanceof HTMLAudioElement) {
       this.audioPlayer = audioElement;
-    }  
+    }
     this.addAnimations();
   }
 
@@ -107,13 +107,13 @@ export class CombateComponent implements OnInit, OnDestroy {
     });
   }
 
-  joinRoom(room: string) {    
+  joinRoom(room: string) {
     const newAudioSrc = '/assets/sonidos/combate.mp3';
     if (this.audioPlayer) {
       this.audioPlayer.src = newAudioSrc;
       this.audioPlayer.load();
       this.audioPlayer.play();
-    }      
+    }
     setTimeout(()=>{
       this.addAnimations2();
     },750);
@@ -168,12 +168,11 @@ export class CombateComponent implements OnInit, OnDestroy {
       htmlFlash.style.animation = `moveFlashes ${durations[index]} linear infinite`;
     });
   }
-  
-  
+
+
 
   addAnimations2() {
     const fondoCombate = document.querySelector('.fondoCombate') as HTMLDivElement;
-    const spriteUser = document.querySelector('.spriteUser') as HTMLDivElement;
     const pjUser = document.querySelector('.pjUser') as HTMLDivElement;
     const vs = document.querySelector('.vs') as HTMLDivElement;
     const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
@@ -183,12 +182,6 @@ export class CombateComponent implements OnInit, OnDestroy {
       setTimeout(()=>{
         fondoCombate.style.display = "none";
       },4000);
-    }
-    if (spriteUser) {
-      spriteUser.style.animation = 'moverSpriteUser 0.2s linear';
-      setTimeout(()=>{
-        spriteUser.style.width = "70%";
-      },200);
     }
     if (pjUser) {
       pjUser.style.animation = 'moverPjUser 0.2s linear';
@@ -215,7 +208,7 @@ export class CombateComponent implements OnInit, OnDestroy {
       },200);
     }
   }
-  
+
 
   cleanupSubscriptions() {
     if (this.messagesSubscription) {

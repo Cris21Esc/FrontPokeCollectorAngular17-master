@@ -4,12 +4,13 @@
   position: relative;
   background-size: 100% 100%;
   height: 100%;
+  max-height: 500px;
   background-image: url("/assets/k/combatStage.png");
   background-repeat: no-repeat;
 }
 
 .pokeStageParent{
-  height: 450px;
+  height: 60vw;
 }
 
 button{
@@ -31,7 +32,7 @@ button:hover{
 
 .personajeUser{
   position: absolute;
-  top: 56%;
+  bottom: 0;
   left: 10vw;
   height:200px;
   width: 200px;
@@ -43,14 +44,14 @@ button:hover{
 
 .personajeContra{
   position: absolute;
-  top: 50px;
-  right: 10vw;
-  height:200px;
-  width: 200px;
+  top: 0;
+  right: 10%;
+  height:35vw;
+  width: 35vw;
   background-repeat: no-repeat;
-  background-image: url("/assets/k/enemy.png");
+  background-image: url("/src/assets/pjs/");
   background-position: 2px 1px;
-  background-size: 300%;  
+  background-size: 40vw;
 }
 .fondoCombate{
   position: relative;
@@ -63,11 +64,11 @@ button:hover{
 .spriteUser{
   position: absolute;
   top: 20%;
-  left: -100px;  
+  left: -100px;
   width: 70%;
   height: 60%;
   background-image: url('/assets/k/spriteUser.png');
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   z-index: 2;
 }
@@ -86,8 +87,8 @@ button:hover{
 
 .pokeInfoUser{
   position: absolute;
-  width: 450px;
-  height:150px;
+  width: 40vw;
+  height:15vw;
   bottom: 10px;
   right: 10px;
   background-size: 100% 100%;
@@ -99,12 +100,12 @@ button:hover{
   position: relative;
   text-align: center;
   width: 100%;
-  font-size: large;
-  top: 30px;
+  font-size: 3vw;
+  top: 2vw;
 }
 .vs{
   position: absolute;
-  top: 40%;  
+  top: 40%;
   left: 42%;
   width: 20%;
   height:20%;
@@ -120,7 +121,7 @@ button:hover{
   right: -15%;
   width: 75%;
   height: 60%;
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url('/assets/k/spriteContra.png');
   z-index: 2;
@@ -140,8 +141,8 @@ button:hover{
 
 .pokeInfoContra{
   position: absolute;
-  width: 450px;
-  height:150px;
+  width: 40vw;
+  height:15vw;
   top: 10px;
   left: 10px;
   background-repeat: no-repeat;
@@ -153,15 +154,15 @@ button:hover{
   position: relative;
   text-align: center;
   width: 90%;
-  font-size: large;
-  top: 30px;
+  font-size: 3vw;
+  top: 2vw;
 }
 
 .linea{
   position: absolute;
   width: 100%;
   height: 5%;
-  background-repeat: no-repeat;  
+  background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url('/assets/k/linea.png');
   z-index: 4;
@@ -183,7 +184,7 @@ button:hover{
   animation-delay: 0.25s;
 }
 
-.flash2{  
+.flash2{
   top: 175px;
 }
 
@@ -199,13 +200,13 @@ button:hover{
   top: 275px;
 }
 
-.flash6{  
+.flash6{
   top: 300px;
   animation-delay: 0.3s;
 }
 
 .top{
-  top: 20%;  
+  top: 20%;
 }
 .bottom{
   bottom: 20%;
