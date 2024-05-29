@@ -13,6 +13,7 @@ import { Pokemon } from '../../pokemon';
 })
 export class CombateComponent implements OnInit, OnDestroy {
   pokeActivo:Pokemon|null = null;
+  pokeContraActivo:Pokemon|null = null;
   audioPlayer: HTMLAudioElement | null = null;
   equipoActivo:Pokemon[]|null=[];
   turno: number | undefined;
@@ -25,15 +26,12 @@ export class CombateComponent implements OnInit, OnDestroy {
   userId: string | null = localStorage.getItem("user");
   private messagesSubscription: Subscription | undefined;
   private lastMessagesSubscription: Subscription | undefined;
+  private actionSubscription: Subscription | undefined;
   lastMessagesCount: number = 10;
 
   constructor(private chatService: ChatService, private servicePokemon: ServicepokemonsService) { }
 
   ngOnInit() {
-    this.idPokeActivo = 1;
-    this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
-      this.movimientos = data;
-    });
     this.servicePokemon.findUserIdByNombre(localStorage.getItem('user')).subscribe(
       (userId) => {
         this.servicePokemon.findAllEquiposByUserId(userId).subscribe(data => {
@@ -62,6 +60,11 @@ export class CombateComponent implements OnInit, OnDestroy {
                                   (response) => {
                                     // @ts-ignore
                                     this.equipoActivo.push(response);
+                                    // @ts-ignore
+                                    this.idPokeActivo = this.equipoActivo[0].id;
+                                    this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
+                                      this.movimientos = data;
+                                    });
                                   });
                               });
                           });
@@ -90,10 +93,11 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendServerMessage(message: string) {
+  sendActionAndServerMessage(message: string) {
     if (this.userId && this.roomId) {
       this.serverMessage = `${this.userId} ha utilizado ${message}`;
       this.chatService.sendServerMessage(this.roomId, this.serverMessage);
+      this
     }
   }
 
@@ -134,21 +138,20 @@ export class CombateComponent implements OnInit, OnDestroy {
           this.messages.push(data);
         }
       });
+      this.actionSubscription = this.chatService.getActions(room).subscribe((data:{userId: string,action:string})=> {
+
+      });
       console.log(this.messages);
     }
   }
 
   addAnimations() {
     const spriteUser = document.querySelector('.spriteUser') as HTMLDivElement;
-    const pjUser = document.querySelector('.pjUser') as HTMLDivElement;
     const vs = document.querySelector('.vs') as HTMLDivElement;
     const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
     if (spriteUser) {
       spriteUser.style.width = '175%';
-    }
-    if (pjUser) {
-      pjUser.style.left = '40%';
     }
     if (vs) {
       vs.style.left = '10000px';
@@ -163,7 +166,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     flashes.forEach((flash, index) => {
       const htmlFlash = flash as HTMLElement; // Casting a HTMLElement
       htmlFlash.style.animation = 'none';
-      htmlFlash.offsetHeight; // Fuerza el reflujo
+      htmlFlash.offsetHeight;
       const durations = ['0.65s', '0.35s', '0.75s', '1s', '1.25s', '0.75s'];
       htmlFlash.style.animation = `moveFlashes ${durations[index]} linear infinite`;
     });
@@ -186,25 +189,25 @@ export class CombateComponent implements OnInit, OnDestroy {
     if (pjUser) {
       pjUser.style.animation = 'moverPjUser 0.2s linear';
       setTimeout(()=>{
-        pjUser.style.left = "8%";
+        pjUser.style.left = "-90%";
       },200);
     }
     if (vs) {
       vs.style.animation = 'enterVs 0.2s linear';
       setTimeout(()=>{
-        vs.style.left = "42%";
+        vs.style.left = "-15%";
       },200);
     }
     if (spriteContra) {
       spriteContra.style.animation = 'enterSpriteContra 0.2s linear';
       setTimeout(()=>{
-        spriteContra.style.right = "-40%";
+        spriteContra.style.right = "-42%";
       },200);
     }
     if (pjContra) {
       pjContra.style.animation = 'enterPjContra 0.2s linear';
       setTimeout(()=>{
-        pjContra.style.left = "65%";
+        pjContra.style.left = "75%";
       },200);
     }
   }
@@ -218,6 +221,10 @@ export class CombateComponent implements OnInit, OnDestroy {
     if (this.lastMessagesSubscription) {
       this.lastMessagesSubscription.unsubscribe();
       this.lastMessagesSubscription = undefined;
+    }
+    if (this.actionSubscription) {
+      this.actionSubscription.unsubscribe();
+      this.actionSubscription = undefined;
     }
   }
 }

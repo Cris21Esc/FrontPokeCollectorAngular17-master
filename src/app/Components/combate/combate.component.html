@@ -10,15 +10,15 @@
         <div class="card-body">
           <div class="row">
             <div class="col-lg-12">
-              <p>Turno actual: {{ turno }}</p>              
+              <p>Turno actual: {{ turno }}</p>
             </div>
             <div class="col-lg-12 pokeStageParent">
               <div class="pokeStage">
                 <div class="fondoCombate">
                   <div class="linea top"></div>
                   <div class="spriteUser"></div>
-                  <div class="pjUser"></div>      
-                  <div class="vs"></div>            
+                  <div class="pjUser"></div>
+                  <div class="vs"></div>
                   <div class="spriteContra"></div>
                   <div class="pjContra"></div>
                   <div class="linea bottom"></div>
@@ -28,19 +28,22 @@
                   <div class="flash flash4"></div>
                   <div class="flash flash5"></div>
                   <div class="flash flash6"></div>
-                </div>             
+                </div>
                 <div class="pokeInfoUser">
                   <div class="general">{{ pokeActivo?.nombre }}</div>
-                </div>   
+                </div>
                 <div class="personajeUser"></div>
                 <div class="pokeInfoContra">
-                  <div class="general">pokemon enemigo 1</div>
-                </div>   
+                  <div class="general">{{ pokeContraActivo?.nombre }}</div>
+                </div>
                 <div class="personajeContra"></div>
+              </div>
+              <div class="pokeText">
+                <div class="general"></div>
               </div>
             </div>
             <div class="col-lg-12 p-4 d-flex justify-content-around">
-              <button class="btn" *ngFor="let movimiento of movimientos" (click)="sendServerMessage(movimiento.nombre)"
+              <button class="btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre)"
                       [value]="movimiento.danio"> {{ movimiento.nombre }}
               </button>
             </div>

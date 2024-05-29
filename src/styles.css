@@ -33,22 +33,22 @@ html{
 
 @keyframes enterVs {
   0%   {left: 1000px;}
-  100% {left: 42%;}
+  100% {left: -15%;}
 }
 
 @keyframes enterSpriteContra {
   0%   {right: 1000px;}
-  100% {right: -40%;}
+  100% {right: -42%;}
 }
 
 @keyframes enterPjContra {
   0%   {left: 1000px;}
-  100% {left: 65%;}
+  100% {left: 75%;}
 }
 
 @keyframes moverPjUser {
-  0%   {left: 40%;}
-  100% {left: 8%;}
+  0%   {left: 0}
+  100% {left: -90%;}
 }
 
 @keyframes fadeIntoCombat {
@@ -60,4 +60,3 @@ html{
 @keyframes moverPjUserOut {
 
 }
-

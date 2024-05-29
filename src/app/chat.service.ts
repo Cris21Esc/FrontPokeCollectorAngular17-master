@@ -24,6 +24,11 @@ export class ChatService {
     this.socket.emit('message', data);
   }
 
+  sendAction(userId: string,action:string):void{
+    const data = { userId:userId,action:action};
+    this.socket.emit('enviarAccion',data);
+  }
+
   getMessages(room: string): Observable<{ userId: string, message: string, room: string }> {
     return new Observable<{ userId: string, message: string, room: string }>(observer => {
       this.socket.on('message', (data: { userId: string, message: string, room: string }) => {
@@ -32,6 +37,17 @@ export class ChatService {
 
       return () => {
         this.socket.off('message');
+      };
+    });
+  }
+
+  getActions(room:string):Observable<{userId: string,action:string}>{
+    return new Observable<{userId: string,action:string}>(observer=>{
+      this.socket.on('recibirAccion',(data:{userId: string,action:string})=>{
+        observer.next(data);
+      })
+      return () => {
+        this.socket.off('recibirAccion');
       };
     });
   }
