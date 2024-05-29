@@ -37,13 +37,12 @@
                   <div class="general">{{ pokeContraActivo?.nombre }}</div>
                 </div>
                 <div class="personajeContra"></div>
-              </div>
-              <div class="pokeText">
-                <div class="general"></div>
+                <div class="pokeActivoUser"></div>
+                <div class="pokeActivoContra"></div>
               </div>
             </div>
             <div class="col-lg-12 p-4 d-flex justify-content-around">
-              <button class="btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre)"
+              <button class="botones btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre)"
                       [value]="movimiento.danio"> {{ movimiento.nombre }}
               </button>
             </div>

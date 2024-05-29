@@ -54,9 +54,29 @@ html{
 @keyframes fadeIntoCombat {
   0%   {opacity: 100%;}
   70%  {opacity: 100%;}
-  100% {opacity: 0%;}
+  100% {opacity: 0;}
+}
+
+@keyframes moverPokeIn {
+  0%{background-size: 100% 0;}
+  100%{background-size: 100% 100%;}
 }
 
 @keyframes moverPjUserOut {
+  0%{right:0}
+  100%{right:1000px}
+}
 
+@keyframes moverPjContraOut {
+  0%{left:0}
+  100%{left:1000px}
+}
+
+@keyframes hitPoke {
+  0%{left: 0}
+  20%{left: -20px}
+  40%{left: 20px}
+  60%{left: -20px}
+  80%{left: 20px}
+  100%{left: 0}
 }

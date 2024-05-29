@@ -24,9 +24,9 @@ export class ChatService {
     this.socket.emit('message', data);
   }
 
-  sendAction(userId: string,action:string):void{
-    const data = { userId:userId,action:action};
-    this.socket.emit('enviarAccion',data);
+  sendAction(userId: string,action:string,room:string,pokeActivoVel:number):void{
+    const data = { userId:userId,action:action,room:room,vel:pokeActivoVel};
+    this.socket.emit('recibirAccion',data);
   }
 
   getMessages(room: string): Observable<{ userId: string, message: string, room: string }> {
@@ -41,13 +41,13 @@ export class ChatService {
     });
   }
 
-  getActions(room:string):Observable<{userId: string,action:string}>{
-    return new Observable<{userId: string,action:string}>(observer=>{
-      this.socket.on('recibirAccion',(data:{userId: string,action:string})=>{
+  getActions(room:string):Observable<{userId: string,user1:string,user2:string,action1:string,action2:string}>{
+    return new Observable<{userId: string,user1:string,user2:string,action1:string,action2:string}>(observer=>{
+      this.socket.on('enviarAccion',(data:{userId: string,user1:string,user2:string,action1:string,action2:string})=>{
         observer.next(data);
       })
       return () => {
-        this.socket.off('recibirAccion');
+        this.socket.off('enviarAccion');
       };
     });
   }
@@ -61,20 +61,6 @@ export class ChatService {
           observer.next(message);
         })
       });
-    });
-  }
-
-  getRooms(): Observable<string[]> {
-    return new Observable<string[]>(observer => {
-      this.socket.off('rooms');
-
-      this.socket.on('rooms', (rooms: string[]) => {
-        observer.next(rooms);
-      });
-
-      return () => {
-        this.socket.off('rooms');
-      };
     });
   }
 

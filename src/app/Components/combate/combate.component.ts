@@ -95,9 +95,11 @@ export class CombateComponent implements OnInit, OnDestroy {
 
   sendActionAndServerMessage(message: string) {
     if (this.userId && this.roomId) {
-      this.serverMessage = `${this.userId} ha utilizado ${message}`;
-      this.chatService.sendServerMessage(this.roomId, this.serverMessage);
-      this
+      // @ts-ignore
+      let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+      botones.forEach( element => element.disabled = true)
+      // @ts-ignore
+      this.chatService.sendAction(this.userId,message,this.roomId,this.pokeActivo.vel);
     }
   }
 
@@ -106,7 +108,6 @@ export class CombateComponent implements OnInit, OnDestroy {
     // @ts-ignore
     this.chatService.waitForOpponent(this.userId);
     this.chatService.onFoundOpponent((data: any) => {
-      console.log('Combate encontrado', data);
       this.joinRoom(data.roomId);
     });
   }
@@ -138,11 +139,29 @@ export class CombateComponent implements OnInit, OnDestroy {
           this.messages.push(data);
         }
       });
-      this.actionSubscription = this.chatService.getActions(room).subscribe((data:{userId: string,action:string})=> {
-
+      this.actionSubscription = this.chatService.getActions(room).subscribe((data:{userId: string,user1:string,user2:string,action1:string,action2:string})=> {
+        if(data.user1 === this.userId){
+          setTimeout(()=>{
+            this.executeActions(data.action1);
+          },1000);
+        }else{
+          setTimeout(()=>{
+            this.executeActions(data.action2);
+          },6000);
+        }
+        // @ts-ignore
+        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+        botones.forEach( element => element.disabled = false)
       });
-      console.log(this.messages);
     }
+  }
+
+  executeActions(action:string){
+    this.serverMessage = `${this.userId} ha utilizado ${action}`;
+    this.chatService.sendServerMessage(this.roomId, this.serverMessage);
+    setTimeout(()=>{
+
+    },500);
   }
 
   addAnimations() {
@@ -150,6 +169,14 @@ export class CombateComponent implements OnInit, OnDestroy {
     const vs = document.querySelector('.vs') as HTMLDivElement;
     const spriteContra = document.querySelector('.spriteContra') as HTMLDivElement;
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
+    const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
+    const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
+    if(pokeActivoUser){
+      pokeActivoUser.style.opacity = "0";
+    }
+    if(pokeActivoContra){
+      pokeActivoContra.style.opacity = "0";
+    }
     if (spriteUser) {
       spriteUser.style.width = '175%';
     }
@@ -184,6 +211,7 @@ export class CombateComponent implements OnInit, OnDestroy {
       fondoCombate.style.animation = 'fadeIntoCombat 4s linear';
       setTimeout(()=>{
         fondoCombate.style.display = "none";
+        this.addAnimations3();
       },4000);
     }
     if (pjUser) {
@@ -210,6 +238,49 @@ export class CombateComponent implements OnInit, OnDestroy {
         pjContra.style.left = "75%";
       },200);
     }
+  }
+
+  addAnimations3(){
+    const pjUser = document.querySelector('.personajeUser') as HTMLDivElement;
+    const pjContra = document.querySelector('.personajeContra') as HTMLDivElement;
+    const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
+    const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
+    setTimeout(()=>{
+      if(pokeActivoUser){
+        setTimeout(()=>{
+          pokeActivoUser.style.opacity = "100%";
+          // @ts-ignore
+          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/'+this.pokeActivo.id+'.png")';
+          pokeActivoUser.style.animation = "moverPokeIn 0.5s ease-out"
+          setTimeout(()=>{
+            pokeActivoUser.style.backgroundSize="100% 100%"
+          },495);
+        },2250);
+      }
+      if(pokeActivoContra){
+        setTimeout(()=>{
+          pokeActivoContra.style.opacity = "100%";
+          // @ts-ignore
+          pokeActivoContra.style.backgroundImage = 'url("/assets/gifs/'+this.pokeActivo.id+'.gif")';
+          pokeActivoContra.style.animation = "moverPokeIn 0.5s ease-out"
+          setTimeout(()=>{
+            pokeActivoContra.style.backgroundSize="100% 100%"
+          },495);
+        },2250);
+      }
+      if (pjUser) {
+        pjUser.style.animation = 'moverPjUserOut 6s linear';
+        setTimeout(()=>{
+          pjUser.style.right = "1000px";
+        },5500);
+      }
+      if (pjContra) {
+        pjContra.style.animation = 'moverPjContraOut 6s linear';
+        setTimeout(()=>{
+          pjContra.style.left = "1000px";
+        },5500);
+      }
+    },3000);
   }
 
 

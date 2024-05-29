@@ -236,15 +236,9 @@ button:hover{
  */
 
  .pokeStageParent{
-  height: 500px;
+  height: 400px;
 }
 
-.pokeText{
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-image: url("/assets/k/pokeChatBattle.png");
-  height: 100px;
-}
 
 .pokeStage{
   display: grid;
@@ -354,6 +348,8 @@ button:hover{
 
 /*Combate*/
 .personajeUser{
+  position: relative;
+  right: 0;
   grid-area: 13/5/21/8;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -361,6 +357,8 @@ button:hover{
 }
 
 .personajeContra{
+  left: 0;
+  position: relative;
   grid-area: 4/15/12/17;
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -396,6 +394,23 @@ button:hover{
   width: 100%;
   height: 100%;
   grid-area: 2/2/3/10;
+}
+.pokeActivoUser{
+  position: relative;
+  left: 0;
+  grid-area: 13/5/21/8;
+  background-size: 100% 0;
+  background-repeat: no-repeat;
+  background-position: bottom;
+}
+
+.pokeActivoContra{
+  position: relative;
+  left: 0;
+  grid-area: 4/15/12/17;
+  background-size: 100% 0;
+  background-repeat: no-repeat;
+  background-position: bottom;
 }
 
 button{
