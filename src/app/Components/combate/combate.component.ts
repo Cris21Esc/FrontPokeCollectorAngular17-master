@@ -12,10 +12,10 @@ import { Pokemon } from '../../pokemon';
   styleUrls: ['./combate.component.css']
 })
 export class CombateComponent implements OnInit, OnDestroy {
-  pokeActivo:Pokemon|null = null;
-  pokeContraActivo:Pokemon|null = null;
+  pokeActivo: Pokemon | null = null;
+  pokeContraActivo: Pokemon | null = null;
   audioPlayer: HTMLAudioElement | null = null;
-  equipoActivo:Pokemon[]|null=[];
+  equipoActivo: Pokemon[] | null = [];
   turno: number | undefined;
   idPokeActivo: number | undefined;
   serverMessage: string | undefined;
@@ -35,7 +35,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.servicePokemon.findUserIdByNombre(localStorage.getItem('user')).subscribe(
       (userId) => {
         this.servicePokemon.findAllEquiposByUserId(userId).subscribe(data => {
-          data.forEach(equipo=>{
+          data.forEach(equipo => {
             this.servicePokemon.findpokemonbyid(equipo.pokemon1_id.toString()).subscribe(
               (response) => {
                 // @ts-ignore
@@ -73,7 +73,7 @@ export class CombateComponent implements OnInit, OnDestroy {
               });
           });
         });
-    });
+      });
     const audioElement = document.querySelector('audio');
     if (audioElement instanceof HTMLAudioElement) {
       this.audioPlayer = audioElement;
@@ -93,13 +93,13 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendActionAndServerMessage(message: string) {
+  sendActionAndServerMessage(message: string,danio:number) {
     if (this.userId && this.roomId) {
       // @ts-ignore
       let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-      botones.forEach( element => element.disabled = true)
+      botones.forEach(element => element.disabled = true)
       // @ts-ignore
-      this.chatService.sendAction(this.userId,message,this.roomId,this.pokeActivo.vel);
+      this.chatService.sendAction(this.userId, message, danio ,this.roomId, this.pokeActivo.vel);
     }
   }
 
@@ -119,9 +119,11 @@ export class CombateComponent implements OnInit, OnDestroy {
       this.audioPlayer.load();
       this.audioPlayer.play();
     }
-    setTimeout(()=>{
+
+    setTimeout(() => {
       this.addAnimations2();
-    },750);
+    }, 750);
+
     this.cleanupSubscriptions();
     // @ts-ignore
     this.pokeActivo = this.equipoActivo[0];
@@ -134,34 +136,83 @@ export class CombateComponent implements OnInit, OnDestroy {
           this.messages.push(data);
         }
       });
+
       this.messagesSubscription = this.chatService.getMessages(room).subscribe((data: { userId: string; message: string; room: string; }) => {
         if (data.room === this.roomId) {
           this.messages.push(data);
         }
       });
-      this.actionSubscription = this.chatService.getActions(room).subscribe((data:{userId: string,user1:string,user2:string,action1:string,action2:string})=> {
-        if(data.user1 === this.userId){
-          setTimeout(()=>{
+
+      this.actionSubscription = this.chatService.getActions(room).subscribe((data: { userId: string, user1: string, user2: string, action1: string,danioAction1:number,action2: string,danioAction2:number}) => {
+        const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
+        const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
+        if (data.user1 === this.userId) {
+          setTimeout(() => {
             this.executeActions(data.action1);
-          },1000);
-        }else{
-          setTimeout(()=>{
+            if (pokeActivoContra) {
+              this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+            }
+            setTimeout(()=>{
+              this.actualizarBarraContra(data.danioAction1);
+            },750);
+          }, 1000);
+          setTimeout(() => {
+            this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+            setTimeout(()=>{
+              this.actualizarBarraUser(data.danioAction2);
+            },750);
+            // @ts-ignore
+            let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+            botones.forEach(element => element.disabled = false);
+          }, 3500);
+        } else {
+          setTimeout(() => {
+            if (pokeActivoContra) {
+              this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+            }
+            setTimeout(()=>{
+              this.actualizarBarraUser(data.danioAction1);
+            },750);
+          }, 1000);
+
+          setTimeout(() => {
             this.executeActions(data.action2);
-          },6000);
+            if (pokeActivoUser) {
+              this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+            }
+            setTimeout(()=>{
+              this.actualizarBarraContra(data.danioAction2);
+            },750);
+            // @ts-ignore
+            let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+            botones.forEach(element => element.disabled = false);
+          }, 3500);
         }
-        // @ts-ignore
-        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-        botones.forEach( element => element.disabled = false)
       });
     }
   }
+  /* A implementar mañana*/
 
-  executeActions(action:string){
+  actualizarBarraUser(danio:number){
+    console.log(danio);
+  }
+
+  actualizarBarraContra(danio:number){
+    console.log(danio);
+  }
+
+  restartAnimation(element: HTMLElement, animation: string) {
+    element.style.animation = 'none';
+    element.offsetHeight; // trigger reflow
+    element.style.animation = animation;
+  }
+
+  executeActions(action: string) {
     this.serverMessage = `${this.userId} ha utilizado ${action}`;
     this.chatService.sendServerMessage(this.roomId, this.serverMessage);
-    setTimeout(()=>{
+    setTimeout(() => {
 
-    },500);
+    }, 500);
   }
 
   addAnimations() {
@@ -171,10 +222,10 @@ export class CombateComponent implements OnInit, OnDestroy {
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
     const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
     const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
-    if(pokeActivoUser){
+    if (pokeActivoUser) {
       pokeActivoUser.style.opacity = "0";
     }
-    if(pokeActivoContra){
+    if (pokeActivoContra) {
       pokeActivoContra.style.opacity = "0";
     }
     if (spriteUser) {
@@ -209,78 +260,84 @@ export class CombateComponent implements OnInit, OnDestroy {
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
     if (fondoCombate) {
       fondoCombate.style.animation = 'fadeIntoCombat 4s linear';
-      setTimeout(()=>{
+      setTimeout(() => {
         fondoCombate.style.display = "none";
         this.addAnimations3();
-      },4000);
+      }, 4000);
     }
     if (pjUser) {
       pjUser.style.animation = 'moverPjUser 0.2s linear';
-      setTimeout(()=>{
+      setTimeout(() => {
         pjUser.style.left = "-90%";
-      },200);
+      }, 200);
     }
     if (vs) {
       vs.style.animation = 'enterVs 0.2s linear';
-      setTimeout(()=>{
+      setTimeout(() => {
         vs.style.left = "-15%";
-      },200);
+      }, 200);
     }
     if (spriteContra) {
       spriteContra.style.animation = 'enterSpriteContra 0.2s linear';
-      setTimeout(()=>{
+      setTimeout(() => {
         spriteContra.style.right = "-42%";
-      },200);
+      }, 200);
     }
     if (pjContra) {
       pjContra.style.animation = 'enterPjContra 0.2s linear';
-      setTimeout(()=>{
+      setTimeout(() => {
         pjContra.style.left = "75%";
-      },200);
+      }, 200);
     }
   }
 
-  addAnimations3(){
+  addAnimations3() {
     const pjUser = document.querySelector('.personajeUser') as HTMLDivElement;
     const pjContra = document.querySelector('.personajeContra') as HTMLDivElement;
     const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
     const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
-    setTimeout(()=>{
-      if(pokeActivoUser){
-        setTimeout(()=>{
+    setTimeout(() => {
+      if (pokeActivoUser) {
+        setTimeout(() => {
           pokeActivoUser.style.opacity = "100%";
           // @ts-ignore
-          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/'+this.pokeActivo.id+'.png")';
+          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.pokeActivo.id + '.png")';
           pokeActivoUser.style.animation = "moverPokeIn 0.5s ease-out"
-          setTimeout(()=>{
-            pokeActivoUser.style.backgroundSize="100% 100%"
-          },495);
-        },2250);
+          setTimeout(() => {
+            pokeActivoUser.style.backgroundSize = "100% 100%"
+          }, 495);
+          // @ts-ignore
+          let divBotones = document.getElementById('divBotones') as HTMLDivElement;
+          divBotones.style.opacity = "100%"
+          // @ts-ignore
+          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+          botones.forEach(element => element.disabled = false)
+        }, 2250);
       }
-      if(pokeActivoContra){
-        setTimeout(()=>{
+      if (pokeActivoContra) {
+        setTimeout(() => {
           pokeActivoContra.style.opacity = "100%";
           // @ts-ignore
-          pokeActivoContra.style.backgroundImage = 'url("/assets/gifs/'+this.pokeActivo.id+'.gif")';
+          pokeActivoContra.style.backgroundImage = 'url("/assets/OnBattle/front/' + this.pokeActivo.id + '.png")';
           pokeActivoContra.style.animation = "moverPokeIn 0.5s ease-out"
-          setTimeout(()=>{
-            pokeActivoContra.style.backgroundSize="100% 100%"
-          },495);
-        },2250);
+          setTimeout(() => {
+            pokeActivoContra.style.backgroundSize = "100% 100%"
+          }, 495);
+        }, 2250);
       }
       if (pjUser) {
         pjUser.style.animation = 'moverPjUserOut 6s linear';
-        setTimeout(()=>{
+        setTimeout(() => {
           pjUser.style.right = "1000px";
-        },5500);
+        }, 5500);
       }
       if (pjContra) {
         pjContra.style.animation = 'moverPjContraOut 6s linear';
-        setTimeout(()=>{
+        setTimeout(() => {
           pjContra.style.left = "1000px";
-        },5500);
+        }, 5500);
       }
-    },3000);
+    }, 3000);
   }
 
 

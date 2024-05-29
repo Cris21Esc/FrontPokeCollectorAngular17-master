@@ -24,8 +24,8 @@ export class ChatService {
     this.socket.emit('message', data);
   }
 
-  sendAction(userId: string,action:string,room:string,pokeActivoVel:number):void{
-    const data = { userId:userId,action:action,room:room,vel:pokeActivoVel};
+  sendAction(userId: string,action:string,danio:number,room:string,pokeActivoVel:number):void{
+    const data = { userId:userId,action:action,danio:danio,room:room,vel:pokeActivoVel};
     this.socket.emit('recibirAccion',data);
   }
 
@@ -41,9 +41,9 @@ export class ChatService {
     });
   }
 
-  getActions(room:string):Observable<{userId: string,user1:string,user2:string,action1:string,action2:string}>{
-    return new Observable<{userId: string,user1:string,user2:string,action1:string,action2:string}>(observer=>{
-      this.socket.on('enviarAccion',(data:{userId: string,user1:string,user2:string,action1:string,action2:string})=>{
+  getActions(room:string):Observable<{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number}>{
+    return new Observable<{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number}>(observer=>{
+      this.socket.on('enviarAccion',(data:{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number})=>{
         observer.next(data);
       })
       return () => {

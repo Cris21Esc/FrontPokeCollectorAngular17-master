@@ -41,8 +41,8 @@
                 <div class="pokeActivoContra"></div>
               </div>
             </div>
-            <div class="col-lg-12 p-4 d-flex justify-content-around">
-              <button class="botones btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre)"
+            <div class="col-lg-12 p-4 d-flex justify-content-around" id="divBotones">
+              <button disabled class="botones btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre,movimiento.danio)"
                       [value]="movimiento.danio"> {{ movimiento.nombre }}
               </button>
             </div>

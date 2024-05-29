@@ -129,26 +129,24 @@ io.on('connection', (socket) => {
   });
 
   socket.on('recibirAccion', (data) => {
-    const {userId, action, room, vel} = data;
+    const {userId, action, danio,room, vel} = data;
     if (rooms[room].actions.length > 0) {
-      /*comparar data con la accion ya introducida*/
-
       if(rooms[room].actions[0].vel > data.vel){
-        io.to(room).emit('enviarAccion',{room:room,user1:rooms[room].actions[0].userId,user2:data.userId,action1:rooms[room].actions[0].action,action2:data.action});
+        io.to(room).emit('enviarAccion',{room:room,user1:rooms[room].actions[0].userId,user2:data.userId,action1:rooms[room].actions[0].action,danioAction1:rooms[room].actions[0].danio,action2:data.action,danioAction2:data.danio});
       }else if(rooms[room].actions[0].vel < data.vel){
-        io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,action1:data.action});
+        io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,danioAction2:rooms[room].actions[0].danio,action1:data.action,danioAction1:data.danio});
       }else if(rooms[room].actions[0].vel === data.vel){
         let numRandom = Math.floor(Math.random() * 2);
         if (numRandom === 0){
-          io.to(room).emit('enviarAccion',{room:room,user1:rooms[room].actions[0].userId,user2:data.userId,action1:rooms[room].actions[0].action,action2:data.action});
+          io.to(room).emit('enviarAccion',{room:room,user1:rooms[room].actions[0].userId,user2:data.userId,action1:rooms[room].actions[0].action,danioAction1:rooms[room].actions[0].danio,action2:data.action,danioAction2:data.danio});
         }else{
-          io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,action1:data.action});
+          io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,danioAction2:rooms[room].actions[0].danio,action1:data.action,danioAction1:data.danio});
         }
       }
 
       rooms[room].actions = [];
     } else {
-      rooms[room].actions.push({userId,action,room,vel});
+      rooms[room].actions.push({userId,action,danio,room,vel});
     }
   });
 });
