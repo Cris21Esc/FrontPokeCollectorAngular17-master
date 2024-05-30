@@ -80,3 +80,29 @@ html{
   80%{left: 20px}
   100%{left: 0}
 }
+
+@keyframes movePokeballContra {
+
+  0% {
+    transform:translateX(0) translateY(0) rotate(-0deg);
+  }
+  50% {
+    transform: translateX(-200%) translateY(-150%) rotate(-1440deg);
+  }
+  100% {
+    transform: translateX(-400%) translateY(550%) rotate(-2880deg);
+  }
+}
+
+@keyframes movePokeballUser {
+
+  0% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  50% {
+    transform:translateX(150%) translateY(-150%) rotate(1440deg);
+  }
+  100% {
+    transform: translateX(400%) translateY(750%) rotate(2880deg);
+  }
+}

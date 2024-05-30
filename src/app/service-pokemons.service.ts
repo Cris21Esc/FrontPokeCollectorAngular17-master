@@ -12,7 +12,7 @@ import {EquipoPokemon} from "./equipo-pokemon";
 })
 export class ServicepokemonsService {
   //URL obtiene el API de POKEMONS
-  private baseURL="https://localhost:8443/api";
+  private baseURL="http://localhost:8085/api";
   private authToken: string | null = null;
 
   constructor(private httpClient:HttpClient) { }

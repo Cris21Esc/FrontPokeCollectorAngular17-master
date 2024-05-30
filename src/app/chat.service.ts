@@ -41,7 +41,7 @@ export class ChatService {
     });
   }
 
-  getActions(room:string):Observable<{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number}>{
+  getActions():Observable<{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number}>{
     return new Observable<{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number}>(observer=>{
       this.socket.on('enviarAccion',(data:{userId: string,user1:string,user2:string,action1:string,danioAction1:number,action2:string,danioAction2:number})=>{
         observer.next(data);
@@ -50,6 +50,22 @@ export class ChatService {
         this.socket.off('enviarAccion');
       };
     });
+  }
+
+  setPokeActivos(roomId:string,userId:string,pokeActivoId:number){
+    const data = { roomId:roomId,userId:userId,pokeActivoId:pokeActivoId};
+    this.socket.emit('setPokeActivo',data);
+  }
+
+  getPokeActivos():Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>{
+    return new Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>(observer=>{
+      this.socket.on("getPokesActivos",(data:{user1:string,pokeUser1:number,user2:string,pokeUser2:number})=>{
+        observer.next(data);
+      });
+      return () => {
+        this.socket.off('getPokesActivos');
+      };
+    })
   }
 
   requestLastMessages(room: string, count: number): Observable<{ userId: string, message: string, room: string }> {

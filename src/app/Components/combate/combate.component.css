@@ -1,244 +1,6 @@
-/* .pokeStage{
-  border-radius: 10px;
-  overflow: hidden;
-  position: relative;
-  background-size: 100% 100%;
-  height: 100%;
-  max-height: 400px;
-  background-image: url("/assets/k/combatStage.png");
-  background-repeat: no-repeat;
-}
-
 .pokeStageParent{
-  height: 75vw;
-}
-
-button{
-  border-radius: 10px;
-  background:#4B6387;
-  color:#fff;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all .5s;
-  box-shadow: 0px 1px 2px rgba(0,0,0,.2);
-}
-
-button:hover{
-  transition: all .5s;
-  transform: rotate(-3deg) scale(1.1);
-  box-shadow: 0px 3px 5px rgba(0,0,0,.4);
-}
-
-.personajeUser{
-  position: absolute;
-  bottom: 0;
-  left: 10vw;
-  height:35vw;
-  max-height: 200px;
-  width: 150px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url("/assets/pjs/user.png");
-}
-
-.personajeContra{
-  position: absolute;
-  top: 4vw;
-  right: 10%;
-  height:35vw;
-  max-height: 200px;
-  width: 150px;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-image: url("/assets/pjs/enemy.png");
-}
-.fondoCombate{
-  position: relative;
-  background-color: gray;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-
-.spriteUser{
-  position: absolute;
-  top: 20%;
-  left: -100px;
-  width: 70%;
-  height: 60%;
-  background-image: url('/assets/k/spriteUser.png');
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  z-index: 2;
-}
-
-.pjUser{
-  position: absolute;
-  top: 22%;
-  left: 8%;
-  width: 55%;
-  height:55%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index: 3;
-  background-image: url('/assets/pjs/frontSpriteUser.png');
-}
-
-.pokeInfoUser{
-  position: absolute;
-  width: 50vw;
-  max-width: 350px;
-  height:15vw;
-  max-height: 150px;
-  bottom: 10px;
-  right: 10px;
-  background-size: 100% 100%;
-  background-repeat: no-repeat;
-  background-image: url('/assets/k/barraPokeUser.png');
-}
-
-.pokeInfoUser .general{
-  position: relative;
-  text-align: center;
-  width: 100%;
-  font-size: medium;
-  top: 15px;
-}
-.vs{
-  position: absolute;
-  top: 40%;
-  left: 42%;
-  width: 20%;
-  height:20%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index: 3;
-  background-image: url('/assets/pjs/vs.png');
-}
-
-.spriteContra{
-  position: absolute;
-  top: 20%;
-  right: -15%;
-  width: 75%;
-  height: 60%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-image: url('/assets/k/spriteContra.png');
-  z-index: 2;
-}
-
-.pjContra{
-  position: absolute;
-  top: 22%;
-  left: 65%;
-  width: 55%;
-  height:55%;
-  background-repeat: no-repeat;
-  background-size: contain;
-  z-index: 3;
-  background-image: url('/assets/pjs/frontSpriteContra.png');
-}
-
-.pokeInfoContra{
-  position: absolute;
-  width: 50vw;
-  max-width: 350px;
-  height:15vw;
-  max-height: 150px;
-  top: 10px;
-  left: 10px;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-image: url('/assets/k/barraPokeEnemiga.png');
-}
-
-.pokeInfoContra .general{
-  position: relative;
-  text-align: center;
-  width: 90%;
-  font-size: medium;
-  top: 15px;
-}
-
-.linea{
-  position: absolute;
-  width: 100%;
-  height: 5%;
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  background-image: url('/assets/k/linea.png');
-  z-index: 4;
-}
-.flash{
-  opacity: 50%;
-  position: absolute;
-  left: -100px;
-  width: 10%;
-  height: 10px;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-image: url('/assets/k/flash.png');
-  z-index: 2;
-}
-
-.flash1{
-  top: 150px;
-  animation-delay: 0.25s;
-}
-
-.flash2{
-  top: 175px;
-}
-
-.flash3{
-  top: 200px;
-}
-
-.flash4{
-  top: 250px;
-}
-
-.flash5{
-  top: 275px;
-}
-
-.flash6{
-  top: 300px;
-  animation-delay: 0.3s;
-}
-
-.top{
-  top: 20%;
-}
-.bottom{
-  bottom: 20%;
-}
-
-@media screen and (max-width: 576px) {
-  .personajeContra{
-    top:6vw;
-  }
-  .pokeInfoContra .general{
-    top: 2px;
-  }
-  .pokeInfoUser .general{
-    top: 2px;
-  }
-}
-
-@media screen and (min-width:1080px) {
-.personajeContra{
-  top:2vw;
-}
-}
- */
-
- .pokeStageParent{
   height: 400px;
 }
-
 
 .pokeStage{
   display: grid;
@@ -253,7 +15,9 @@ button:hover{
   background-repeat: no-repeat;
   z-index: 0;
 }
+
 /* intro Vs*/
+
 .fondoCombate{
   grid-area: 1/1/21/21;
   display: grid;
@@ -263,20 +27,22 @@ button:hover{
   background-color: gray;
   z-index: 1;
 }
+
 .linea{
   position: relative;
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-image: url("/assets/k/linea.png");
 }
- .top{
-   grid-area: 5/1/6/21;
- }
- .bottom{
-   grid-area: 16/1/17/21;
- }
 
- /* lineas colores*/
+.top{
+  grid-area: 5/1/6/21;
+}
+
+.bottom{
+  grid-area: 16/1/17/21;
+}
+
 .spriteUser{
   position: relative;
   grid-area: 6/1/16/21;
@@ -292,7 +58,7 @@ button:hover{
   background-image: url("/assets/k/spriteContra.png");
   z-index: 3;
 }
-/* personajes intro */
+
 .pjUser{
   position: relative;
   grid-area: 7/8/16/15;
@@ -308,7 +74,7 @@ button:hover{
   background-image: url("/assets/pjs/frontSpriteContra.png");
   z-index: 5;
 }
-/*logo vs*/
+
 .vs{
   position: relative;
   grid-area: 9/10/13/13;
@@ -317,7 +83,6 @@ button:hover{
   z-index: 5;
 }
 
-/*flashes*/
 .flash{
   position: relative;
   background-size: 100% 30%;
@@ -412,6 +177,24 @@ button:hover{
   background-size: 100% 0;
   background-repeat: no-repeat;
   background-position: bottom;
+  opacity: 0;
+}
+
+.pokeball{
+  position: relative; 
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/pokeball.png");
+  transform-origin: center;
+}
+
+.user{
+grid-area: 13/1/14/2;
+}
+
+.contra{
+grid-area: 5/20/6/21;
 }
 
 #divBotones{

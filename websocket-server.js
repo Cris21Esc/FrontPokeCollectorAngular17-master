@@ -39,7 +39,8 @@ io.on('connection', (socket) => {
         admin: socket.id,
         users: {},
         actions: [],
-        messages: []
+        messages: [],
+        pokesActivos: []
       };
     }
 
@@ -61,7 +62,8 @@ io.on('connection', (socket) => {
       rooms[roomId] = {
         users: [opponent.userId, userId],
         messages: [],
-        actions:[]
+        actions:[],
+        pokesActivos: []
       };
 
       io.to(roomId).emit('found-opponent', {roomId, users: rooms[roomId].users});
@@ -149,7 +151,18 @@ io.on('connection', (socket) => {
       rooms[room].actions.push({userId,action,danio,room,vel});
     }
   });
+  
+  socket.on('setPokeActivo',(data)=>{
+    console.log(data);
+    const {roomId,userId,pokeActivoId} = data;
+    if(rooms[roomId].pokesActivos.length > 0){
+      io.to(roomId).emit("getPokesActivos",{user1:rooms[roomId].pokesActivos[0].userId,pokeUser1:rooms[roomId].pokesActivos[0].pokeActivoId,user2:data.userId,pokeUser2:data.pokeActivoId})
+    }else{
+      rooms[roomId].pokesActivos.push({userId,pokeActivoId});
+    }
+  });
 });
+
 
 const port = process.env.PORT || 3000;
 server.listen(port, () => {

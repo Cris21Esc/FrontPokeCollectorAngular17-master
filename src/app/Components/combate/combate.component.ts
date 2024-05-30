@@ -23,10 +23,11 @@ export class CombateComponent implements OnInit, OnDestroy {
   messages: { userId: string; message: string; room: string; }[] = [];
   protected movimientos: Movimiento[] | undefined;
   roomId: string = '';
-  userId: string | null = localStorage.getItem("user");
+  userId: string | null | undefined = "";
   private messagesSubscription: Subscription | undefined;
   private lastMessagesSubscription: Subscription | undefined;
   private actionSubscription: Subscription | undefined;
+  private getPokeActivos:  Subscription | undefined;
   lastMessagesCount: number = 10;
 
   constructor(private chatService: ChatService, private servicePokemon: ServicepokemonsService) { }
@@ -93,13 +94,13 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendActionAndServerMessage(message: string,danio:number) {
+  sendActionAndServerMessage(message: string, danio: number) {
     if (this.userId && this.roomId) {
       // @ts-ignore
       let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
       botones.forEach(element => element.disabled = true)
       // @ts-ignore
-      this.chatService.sendAction(this.userId, message, danio ,this.roomId, this.pokeActivo.vel);
+      this.chatService.sendAction(this.userId, message, danio, this.roomId, this.pokeActivo.vel);
     }
   }
 
@@ -119,17 +120,22 @@ export class CombateComponent implements OnInit, OnDestroy {
       this.audioPlayer.load();
       this.audioPlayer.play();
     }
-
-    setTimeout(() => {
-      this.addAnimations2();
-    }, 750);
-
-    this.cleanupSubscriptions();
     // @ts-ignore
     this.pokeActivo = this.equipoActivo[0];
+
+    this.cleanupSubscriptions();
     if (this.userId) {
       this.chatService.joinRoom(room, this.userId);
       this.roomId = room;
+
+      // @ts-ignore
+      this.chatService.setPokeActivos(this.roomId,this.userId,this.pokeActivo.id);
+      this.getPokeActivos = this.chatService.getPokeActivos().subscribe((data:{user1:string,pokeUser1:number,user2:string,pokeUser2:number})=>{
+        console.log(data);
+        setTimeout(() => {
+          this.addAnimations2(data.user1,data.pokeUser1,data.user2,data.pokeUser2);
+        }, 750);
+      });
 
       this.lastMessagesSubscription = this.chatService.requestLastMessages(room, this.lastMessagesCount).subscribe((data: { userId: string; message: string; room: string; }) => {
         if (data.room === this.roomId) {
@@ -143,7 +149,7 @@ export class CombateComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.actionSubscription = this.chatService.getActions(room).subscribe((data: { userId: string, user1: string, user2: string, action1: string,danioAction1:number,action2: string,danioAction2:number}) => {
+      this.actionSubscription = this.chatService.getActions().subscribe((data: { userId: string, user1: string, user2: string, action1: string, danioAction1: number, action2: string, danioAction2: number }) => {
         const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
         const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
         if (data.user1 === this.userId) {
@@ -152,15 +158,15 @@ export class CombateComponent implements OnInit, OnDestroy {
             if (pokeActivoContra) {
               this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
             }
-            setTimeout(()=>{
+            setTimeout(() => {
               this.actualizarBarraContra(data.danioAction1);
-            },750);
+            }, 750);
           }, 1000);
           setTimeout(() => {
             this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
-            setTimeout(()=>{
+            setTimeout(() => {
               this.actualizarBarraUser(data.danioAction2);
-            },750);
+            }, 750);
             // @ts-ignore
             let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
             botones.forEach(element => element.disabled = false);
@@ -170,9 +176,9 @@ export class CombateComponent implements OnInit, OnDestroy {
             if (pokeActivoContra) {
               this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
             }
-            setTimeout(()=>{
+            setTimeout(() => {
               this.actualizarBarraUser(data.danioAction1);
-            },750);
+            }, 750);
           }, 1000);
 
           setTimeout(() => {
@@ -180,9 +186,9 @@ export class CombateComponent implements OnInit, OnDestroy {
             if (pokeActivoUser) {
               this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
             }
-            setTimeout(()=>{
+            setTimeout(() => {
               this.actualizarBarraContra(data.danioAction2);
-            },750);
+            }, 750);
             // @ts-ignore
             let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
             botones.forEach(element => element.disabled = false);
@@ -193,17 +199,17 @@ export class CombateComponent implements OnInit, OnDestroy {
   }
   /* A implementar mañana*/
 
-  actualizarBarraUser(danio:number){
+  actualizarBarraUser(danio: number) {
     console.log(danio);
   }
 
-  actualizarBarraContra(danio:number){
+  actualizarBarraContra(danio: number) {
     console.log(danio);
   }
 
   restartAnimation(element: HTMLElement, animation: string) {
     element.style.animation = 'none';
-    element.offsetHeight; // trigger reflow
+    element.offsetHeight;
     element.style.animation = animation;
   }
 
@@ -222,6 +228,14 @@ export class CombateComponent implements OnInit, OnDestroy {
     const pjContra = document.querySelector('.pjContra') as HTMLDivElement;
     const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
     const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
+    const pokeballUser = document.querySelector('.user') as HTMLDivElement;
+    const pokeballContra = document.querySelector('.contra') as HTMLDivElement;
+    if (pokeballUser) {
+      pokeballUser.style.left = "-50px";
+    }
+    if (pokeballContra) {
+      pokeballContra.style.left = "50px";
+    }
     if (pokeActivoUser) {
       pokeActivoUser.style.opacity = "0";
     }
@@ -252,7 +266,7 @@ export class CombateComponent implements OnInit, OnDestroy {
 
 
 
-  addAnimations2() {
+  addAnimations2(user1: string, pokeActivo1: number, user2: string, pokeActivo2: number) {
     const fondoCombate = document.querySelector('.fondoCombate') as HTMLDivElement;
     const pjUser = document.querySelector('.pjUser') as HTMLDivElement;
     const vs = document.querySelector('.vs') as HTMLDivElement;
@@ -262,7 +276,7 @@ export class CombateComponent implements OnInit, OnDestroy {
       fondoCombate.style.animation = 'fadeIntoCombat 4s linear';
       setTimeout(() => {
         fondoCombate.style.display = "none";
-        this.addAnimations3();
+        this.addAnimations3(user1,pokeActivo1,user2,pokeActivo2);
       }, 4000);
     }
     if (pjUser) {
@@ -291,17 +305,26 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
   }
 
-  addAnimations3() {
+  addAnimations3(user1: string, pokeActivo1: number, user2: string, pokeActivo2: number) {
     const pjUser = document.querySelector('.personajeUser') as HTMLDivElement;
     const pjContra = document.querySelector('.personajeContra') as HTMLDivElement;
     const pokeActivoUser = document.querySelector('.pokeActivoUser') as HTMLDivElement;
     const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
+    let pokeUsu = 0;
+    let pokeContra = 0;
+    if(user1 === localStorage.getItem('user')){
+      pokeUsu = pokeActivo1;
+      pokeContra = pokeActivo2;
+    }else{
+      pokeUsu = pokeActivo2;
+      pokeContra = pokeActivo1;
+    }
     setTimeout(() => {
       if (pokeActivoUser) {
         setTimeout(() => {
           pokeActivoUser.style.opacity = "100%";
           // @ts-ignore
-          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.pokeActivo.id + '.png")';
+          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + pokeUsu + '.png")';
           pokeActivoUser.style.animation = "moverPokeIn 0.5s ease-out"
           setTimeout(() => {
             pokeActivoUser.style.backgroundSize = "100% 100%"
@@ -318,7 +341,7 @@ export class CombateComponent implements OnInit, OnDestroy {
         setTimeout(() => {
           pokeActivoContra.style.opacity = "100%";
           // @ts-ignore
-          pokeActivoContra.style.backgroundImage = 'url("/assets/OnBattle/front/' + this.pokeActivo.id + '.png")';
+          pokeActivoContra.style.backgroundImage = 'url("/assets/OnBattle/front/' + pokeContra + '.png")';
           pokeActivoContra.style.animation = "moverPokeIn 0.5s ease-out"
           setTimeout(() => {
             pokeActivoContra.style.backgroundSize = "100% 100%"
@@ -329,15 +352,35 @@ export class CombateComponent implements OnInit, OnDestroy {
         pjUser.style.animation = 'moverPjUserOut 6s linear';
         setTimeout(() => {
           pjUser.style.right = "1000px";
-        }, 5500);
+        }, 5500); setTimeout(() => {
+          this.lanzarPokeball();
+        }, 1000);
       }
       if (pjContra) {
         pjContra.style.animation = 'moverPjContraOut 6s linear';
         setTimeout(() => {
           pjContra.style.left = "1000px";
         }, 5500);
+        setTimeout(() => {
+          this.lanzarPokeball();
+        }, 1000);
       }
     }, 3000);
+  }
+
+  lanzarPokeball() {
+    const pokeballUser = document.querySelector('.user') as HTMLDivElement;
+    const pokeballContra = document.querySelector('.contra') as HTMLDivElement;
+    pokeballUser.style.opacity= "100%";
+    pokeballContra.style.opacity= "100%";
+    pokeballUser.style.left= "0";
+    pokeballContra.style.left= "0";
+    this.restartAnimation(pokeballUser,"movePokeballUser 1.25s cubic-bezier(0.3, 0.02, 0.32, 1)");
+    this.restartAnimation(pokeballContra,"movePokeballContra 1.25s cubic-bezier(0.3, 0.02, 0.32, 1)");
+    setTimeout(()=>{
+      pokeballUser.style.opacity= "0";
+      pokeballContra.style.opacity= "0";
+    },1250);    
   }
 
 
