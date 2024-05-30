@@ -11,7 +11,7 @@ html{
 }
 
 .general{
-  font-family: CustomFont;
+  font-family: CustomFont, serif;
 }
 
 @keyframes fadeIn {

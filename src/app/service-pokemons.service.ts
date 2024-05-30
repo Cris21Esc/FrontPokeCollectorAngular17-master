@@ -12,7 +12,7 @@ import {EquipoPokemon} from "./equipo-pokemon";
 })
 export class ServicepokemonsService {
   //URL obtiene el API de POKEMONS
-  private baseURL="http://localhost:8085/api";
+  private baseURL="http://34.227.46.152:8085/api";
   private authToken: string | null = null;
 
   constructor(private httpClient:HttpClient) { }
@@ -93,7 +93,7 @@ export class ServicepokemonsService {
     return this.httpClient.get<Movimiento[]>(`${this.baseURL}/movimientos/`+id)
   }
 
-  findAllEquiposByUserId(userId: number):Observable<EquipoPokemon[]> {    
+  findAllEquiposByUserId(userId: number):Observable<EquipoPokemon[]> {
     return this.httpClient.get<EquipoPokemon[]>(`${this.baseURL}/getAllEquipos/`+userId);
   }
 
