@@ -14,6 +14,8 @@ export class Pokemon {
 
   public hp: number = -1;
 
+  public saludActual = -1;
+
   public atk: number =-1;
 
   public atk_esp: number = -1;
@@ -23,4 +25,6 @@ export class Pokemon {
   public def_esp: number = -1;
 
   public vel: number = -1;
+
+  public disabled: boolean = false;
 }

@@ -17,6 +17,7 @@ import { MenuPrincipalComponent } from './Components/menu-principal/menu-princip
 import {CombateComponent} from "./Components/combate/combate.component";
 import {ChatService} from "./chat.service";
 import { routes } from './app.routes';
+import {NgOptimizedImage} from "@angular/common";
 
 /*DECLARAMOS LOS NUEVO COMPONENTES*/
 @NgModule({
@@ -33,12 +34,13 @@ import { routes } from './app.routes';
     MenuPrincipalComponent,
     CombateComponent,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    RouterModule.forRoot(routes),
-    HttpClientModule
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        RouterModule.forRoot(routes),
+        HttpClientModule,
+        NgOptimizedImage
+    ],
   providers: [
     ServiceusersService,
     ChatService

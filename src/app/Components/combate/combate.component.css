@@ -13,7 +13,7 @@
   background-size: 100% 100%;
   background-image: url("/assets/k/combatStage.png");
   background-repeat: no-repeat;
-  z-index: 0;
+  z-index: 1 ;
 }
 
 /* intro Vs*/
@@ -25,7 +25,7 @@
   grid-template-columns: repeat(20,1fr);
   grid-template-rows: repeat(20,1fr);
   background-color: gray;
-  z-index: 1;
+  z-index: 3;
 }
 
 .linea{
@@ -132,6 +132,8 @@
 
 .pokeInfoUser{
   display: grid;
+  position: relative;
+  z-index: -2;
   grid-template-rows: repeat(6,1fr);
   grid-template-columns: repeat(11,1fr);
   grid-area: 15/10/21/21;
@@ -145,8 +147,11 @@
   height: 100%;
   grid-area: 2/3/3/11;
 }
+
 .pokeInfoContra{
   display: grid;
+  position: relative;
+  z-index: -2;
   grid-template-rows: repeat(6,1fr);
   grid-template-columns: repeat(11,1fr);
   grid-area: 1/1/7/12;
@@ -160,11 +165,52 @@
   height: 100%;
   grid-area: 2/2/3/10;
 }
+
+.barraVida{
+  position: relative;
+  border-radius: 2px;
+  display: grid;
+  z-index: auto;
+  grid-template-columns: 2.7fr 10fr 0.4fr;
+  grid-template-rows: repeat(6,1fr);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/barraVida.png");
+}
+
+.barraContra{
+  grid-area: 4 / 2 / 5 / 10;
+}
+
+.barraUser{
+  grid-area: 4/3/5/11;
+}
+
+.psUser{
+  position: relative;
+  z-index: -1; /* Coloca a psContra en un nivel inferior */
+  grid-area: 2/2/5/3;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/ps.png");
+  width: 100%;
+}
+
+.psContra {
+  position: relative;
+  z-index: -1; /* Coloca a psContra en un nivel inferior */
+  grid-area: 2 / 2 / 5 / 3;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-image: url("/assets/k/ps.png");
+  width: 100%;
+}
+
 .pokeActivoUser{
   position: relative;
   left: 0;
   top:10px;
-  grid-area: 13/5/21/8;
+  grid-area: 13/4/21/8;
   background-size: 100% 0;
   background-repeat: no-repeat;
   background-position: bottom;
@@ -181,7 +227,7 @@
 }
 
 .pokeball{
-  position: relative; 
+  position: relative;
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -197,7 +243,7 @@ grid-area: 13/1/14/2;
 grid-area: 5/20/6/21;
 }
 
-#divBotones{
+.divBotones{
   opacity: 0;
 }
 

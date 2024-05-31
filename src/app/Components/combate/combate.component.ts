@@ -12,10 +12,11 @@ import { Pokemon } from '../../pokemon';
   styleUrls: ['./combate.component.css']
 })
 export class CombateComponent implements OnInit, OnDestroy {
+  pokeIdArray:number=0;
   pokeActivo: Pokemon | null = null;
   pokeContraActivo: Pokemon | null = null;
   audioPlayer: HTMLAudioElement | null = null;
-  equipoActivo: Pokemon[] | null = [];
+  protected equipoActivo: Pokemon[] | null = [];
   turno: number | undefined;
   idPokeActivo: number | undefined;
   serverMessage: string | undefined;
@@ -41,26 +42,38 @@ export class CombateComponent implements OnInit, OnDestroy {
               (response) => {
                 // @ts-ignore
                 this.equipoActivo.push(response);
+                // @ts-ignore
+                this.equipoActivo[0].disabled = false;
                 this.servicePokemon.findpokemonbyid(equipo.pokemon2_id.toString()).subscribe(
                   (response) => {
                     // @ts-ignore
                     this.equipoActivo.push(response);
+                    // @ts-ignore
+                    this.equipoActivo[1].disabled = false;
                     this.servicePokemon.findpokemonbyid(equipo.pokemon3_id.toString()).subscribe(
                       (response) => {
                         // @ts-ignore
                         this.equipoActivo.push(response);
+                        // @ts-ignore
+                        this.equipoActivo[2].disabled = false;
                         this.servicePokemon.findpokemonbyid(equipo.pokemon4_id.toString()).subscribe(
                           (response) => {
                             // @ts-ignore
                             this.equipoActivo.push(response);
+                            // @ts-ignore
+                            this.equipoActivo[3].disabled = false;
                             this.servicePokemon.findpokemonbyid(equipo.pokemon5_id.toString()).subscribe(
                               (response) => {
                                 // @ts-ignore
                                 this.equipoActivo.push(response);
+                                // @ts-ignore
+                                this.equipoActivo[4].disabled = false;
                                 this.servicePokemon.findpokemonbyid(equipo.pokemon6_id.toString()).subscribe(
                                   (response) => {
                                     // @ts-ignore
                                     this.equipoActivo.push(response);
+                                    // @ts-ignore
+                                    this.equipoActivo[5].disabled = false;
                                     // @ts-ignore
                                     this.idPokeActivo = this.equipoActivo[0].id;
                                     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
@@ -100,6 +113,9 @@ export class CombateComponent implements OnInit, OnDestroy {
       let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
       botones.forEach(element => element.disabled = true)
       // @ts-ignore
+      let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+      pokeBotones.forEach(element => element.disabled = true)
+      // @ts-ignore
       this.chatService.sendAction(this.userId, message, danio, this.roomId, this.pokeActivo.vel);
     }
   }
@@ -122,6 +138,9 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
     // @ts-ignore
     this.pokeActivo = this.equipoActivo[0];
+    // @ts-ignore
+    this.pokeActivo.saludActual = this.pokeActivo.hp;
+    this.pokeActivo.disabled = true;
 
     this.cleanupSubscriptions();
     if (this.userId) {
@@ -131,10 +150,20 @@ export class CombateComponent implements OnInit, OnDestroy {
       // @ts-ignore
       this.chatService.setPokeActivos(this.roomId,this.userId,this.pokeActivo.id);
       this.getPokeActivos = this.chatService.getPokeActivos().subscribe((data:{user1:string,pokeUser1:number,user2:string,pokeUser2:number})=>{
-        console.log(data);
-        setTimeout(() => {
-          this.addAnimations2(data.user1,data.pokeUser1,data.user2,data.pokeUser2);
-        }, 750);
+        let pokeContra = 0;
+        if(data.user1 === localStorage.getItem('user')){
+          pokeContra = data.pokeUser2;
+        }else{
+          pokeContra = data.pokeUser1;
+        }
+        this.servicePokemon.findpokemonbyid(pokeContra.toString()).subscribe((pokeData)=>{
+          this.pokeContraActivo = pokeData;
+          // @ts-ignore
+          this.pokeContraActivo.saludActual = this.pokeContraActivo.hp;
+          setTimeout(() => {
+            this.addAnimations2(data.user1,data.pokeUser1,data.user2,data.pokeUser2);
+          }, 750);
+        });
       });
 
       this.lastMessagesSubscription = this.chatService.requestLastMessages(room, this.lastMessagesCount).subscribe((data: { userId: string; message: string; room: string; }) => {
@@ -154,13 +183,22 @@ export class CombateComponent implements OnInit, OnDestroy {
         const pokeActivoContra = document.querySelector('.pokeActivoContra') as HTMLDivElement;
         if (data.user1 === this.userId) {
           setTimeout(() => {
-            this.executeActions(data.action1);
-            if (pokeActivoContra) {
+            // @ts-ignore
+            if (pokeActivoContra && this.pokeContraActivo.saludActual>0) {
+              this.executeActions(data.action1);
               this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+              setTimeout(() => {
+                this.actualizarBarraContra(data.danioAction1);
+              }, 750);
+              setTimeout(()=>{
+                // @ts-ignore
+                if(this.pokeContraActivo.saludActual<=0){
+                  this.derrotarPoke(this.pokeIdArray);
+                }
+              },3250);
+            }else{
+
             }
-            setTimeout(() => {
-              this.actualizarBarraContra(data.danioAction1);
-            }, 750);
           }, 1000);
           setTimeout(() => {
             this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
@@ -170,6 +208,9 @@ export class CombateComponent implements OnInit, OnDestroy {
             // @ts-ignore
             let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
             botones.forEach(element => element.disabled = false);
+            // @ts-ignore
+            let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+            pokeBotones.forEach(element => element.disabled = true)
           }, 3500);
         } else {
           setTimeout(() => {
@@ -192,19 +233,59 @@ export class CombateComponent implements OnInit, OnDestroy {
             // @ts-ignore
             let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
             botones.forEach(element => element.disabled = false);
+            // @ts-ignore
+            let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+            pokeBotones.forEach(element => element.disabled = true)
           }, 3500);
         }
       });
     }
   }
-  /* A implementar mañana*/
-
-  actualizarBarraUser(danio: number) {
-    console.log(danio);
+  actualizarBarraUser(danio: number): void {
+    // @ts-ignore
+    let danioCalculated = Math.floor(0.01 * 85 * ((((0.2*50+1)*danio*this.pokeActivo.atk)/(25*this.pokeActivo.def))+2));
+    console.log(danioCalculated)
+    // @ts-ignore
+    this.pokeActivo.saludActual = Math.max(0, this.pokeActivo.saludActual - danioCalculated);
+    // @ts-ignore
+    this.animarBarra(this.pokeActivo.saludActual, this.pokeActivo.hp, ".psUser");
   }
 
-  actualizarBarraContra(danio: number) {
-    console.log(danio);
+  actualizarBarraContra(danio: number): void {
+    // @ts-ignore
+    let danioCalculated = Math.floor(0.01 * 85 * ((((0.2*50+1)*danio*this.pokeContraActivo.atk)/(25*this.pokeContraActivo.def))+2));
+    console.log(danioCalculated)
+    // @ts-ignore
+    this.pokeContraActivo.saludActual = Math.max(0, this.pokeContraActivo.saludActual - danioCalculated);
+    // @ts-ignore
+    this.animarBarra(this.pokeContraActivo.saludActual, this.pokeContraActivo.hp, ".psContra");
+  }
+
+  animarBarra(saludActual: number, maxSalud: number, selector: string): void {
+    let barra = document.querySelector(selector) as HTMLDivElement;
+    if (!barra) return;
+
+    let anchoContenedor = barra.parentElement ? barra.parentElement.offsetWidth : barra.offsetWidth;
+    let porcentajeSalud = saludActual / maxSalud;
+    let anchoNuevo = anchoContenedor * porcentajeSalud;
+
+    const duracion = 2000; // Duración de la animación en milisegundos
+    const fps = 60; // Frames por segundo
+    const interval = duracion / fps;
+    const pasos = (barra.offsetWidth - anchoNuevo) / (duracion / interval);
+
+    const animar = () => {
+      let anchoActual = barra.offsetWidth;
+      anchoActual -= pasos;
+      barra.style.width = `${anchoActual}px`;
+      if ((pasos > 0 && anchoActual <= anchoNuevo) || (pasos < 0 && anchoActual >= anchoNuevo)) {
+        barra.style.width = `${anchoNuevo}px`;
+      } else {
+        requestAnimationFrame(animar);
+      }
+    };
+
+    requestAnimationFrame(animar);
   }
 
   restartAnimation(element: HTMLElement, animation: string) {
@@ -216,9 +297,11 @@ export class CombateComponent implements OnInit, OnDestroy {
   executeActions(action: string) {
     this.serverMessage = `${this.userId} ha utilizado ${action}`;
     this.chatService.sendServerMessage(this.roomId, this.serverMessage);
-    setTimeout(() => {
+  }
 
-    }, 500);
+  derrotarPoke(pokeIdArray:number){
+    // @ts-ignore
+    this.equipoActivo[pokeIdArray].disabled = true;
   }
 
   addAnimations() {
@@ -330,11 +413,16 @@ export class CombateComponent implements OnInit, OnDestroy {
             pokeActivoUser.style.backgroundSize = "100% 100%"
           }, 495);
           // @ts-ignore
-          let divBotones = document.getElementById('divBotones') as HTMLDivElement;
-          divBotones.style.opacity = "100%"
+          let divBotones = document.getElementsByClassName('divBotones') as HTMLCollectionOf<HTMLDivElement>;
+          Array.from(divBotones).forEach(div => {
+            div.style.opacity = "100%";
+          });
           // @ts-ignore
           let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-          botones.forEach(element => element.disabled = false)
+          botones.forEach(element => element.disabled = false);
+          // @ts-ignore
+          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+          pokeBotones.forEach(element => element.disabled = true)
         }, 2250);
       }
       if (pokeActivoContra) {
@@ -380,7 +468,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     setTimeout(()=>{
       pokeballUser.style.opacity= "0";
       pokeballContra.style.opacity= "0";
-    },1250);    
+    },1250);
   }
 
 

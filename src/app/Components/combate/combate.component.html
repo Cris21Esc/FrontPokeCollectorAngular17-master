@@ -31,10 +31,16 @@
                 </div>
                 <div class="pokeInfoUser">
                   <div class="general">{{ pokeActivo?.nombre }}</div>
+                  <div class="barraVida barraUser">
+                    <div class="psUser"></div>
+                  </div>
                 </div>
                 <div class="personajeUser"></div>
                 <div class="pokeInfoContra">
                   <div class="general">{{ pokeContraActivo?.nombre }}</div>
+                  <div class="barraVida barraContra">
+                    <div class="psContra"></div>
+                  </div>
                 </div>
                 <div class="pokeball user"></div>
                 <div class="pokeball contra"></div>
@@ -43,17 +49,22 @@
                 <div class="pokeActivoContra"></div>
               </div>
             </div>
-            <div class="col-lg-12 p-4 d-flex justify-content-around" id="divBotones">
+            <div class="col-lg-12 p-4 d-flex justify-content-around divBotones" id="movimientos">
               <button disabled class="botones btn" *ngFor="let movimiento of movimientos" (click)="sendActionAndServerMessage(movimiento.nombre,movimiento.danio)"
                       [value]="movimiento.danio"> {{ movimiento.nombre }}
+              </button>
+            </div>
+            <div class="col-lg-12 p-4 d-flex justify-content-around divBotones" id="cambiarPoke">
+              <button class="pokeBoton btn" *ngFor="let poke of equipoActivo" [disabled]="poke.disabled" (click)="sendActionAndServerMessage('cambio',poke.id)"
+                      [value]="poke.id"><img [src]="'/assets/OnBattle/'+poke.id+'.gif'" [alt]="poke.nombre"> {{ poke.nombre }}
               </button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-4 d-flex justify-content-around">
-      <div>
+    <div class="col-lg-4 d-flex">
+      <div class="w-100">
         <div class="chat-container">
           <div class="card">
             <div class="card-header">
