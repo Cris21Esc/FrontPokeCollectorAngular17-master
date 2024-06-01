@@ -40,7 +40,8 @@ io.on('connection', (socket) => {
         users: {},
         actions: [],
         messages: [],
-        pokesActivos: []
+        pokesActivos: [],
+        pokeDown:false
       };
     }
 
@@ -63,7 +64,8 @@ io.on('connection', (socket) => {
         users: [opponent.userId, userId],
         messages: [],
         actions:[],
-        pokesActivos: []
+        pokesActivos: [],
+        pokeDown: false
       };
 
       io.to(roomId).emit('found-opponent', {roomId, users: rooms[roomId].users});
@@ -153,7 +155,6 @@ io.on('connection', (socket) => {
   });
   
   socket.on('setPokeActivo',(data)=>{
-    console.log(data);
     const {roomId,userId,pokeActivoId} = data;
     if(rooms[roomId].pokesActivos.length > 0){
       io.to(roomId).emit("getPokesActivos",{user1:rooms[roomId].pokesActivos[0].userId,pokeUser1:rooms[roomId].pokesActivos[0].pokeActivoId,user2:data.userId,pokeUser2:data.pokeActivoId})
@@ -161,6 +162,12 @@ io.on('connection', (socket) => {
       rooms[roomId].pokesActivos.push({userId,pokeActivoId});
     }
   });
+
+  socket.on('setPokeIsDown',data=>{
+    const {roomId,pokeDown} = data;
+    rooms[roomId].pokeDown = pokeDown;
+    io.to(roomId).emit('getPokeIsDown',{pokeDown:rooms[roomId].pokeDown})
+  })
 });
 
 

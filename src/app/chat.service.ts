@@ -56,6 +56,9 @@ export class ChatService {
     const data = { roomId:roomId,userId:userId,pokeActivoId:pokeActivoId};
     this.socket.emit('setPokeActivo',data);
   }
+  setPokeIsDown(roomId:string,pokeDown:boolean){
+    this.socket.emit("setPokeIsDown",{roomId:roomId,pokeDown:pokeDown})
+  }
 
   getPokeActivos():Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>{
     return new Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>(observer=>{
@@ -66,6 +69,14 @@ export class ChatService {
         this.socket.off('getPokesActivos');
       };
     })
+  }
+
+  getPokeIsDown():Observable<{pokeDown:boolean}>{
+    return new Observable<{pokeDown:boolean}>(observer=>{
+      this.socket.on("getPokeIsDown",(data)=>{
+        observer.next(data);
+      })
+    });
   }
 
   requestLastMessages(room: string, count: number): Observable<{ userId: string, message: string, room: string }> {

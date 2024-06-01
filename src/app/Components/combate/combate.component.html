@@ -55,7 +55,7 @@
               </button>
             </div>
             <div class="col-lg-12 p-4 d-flex justify-content-around divBotones" id="cambiarPoke">
-              <button class="pokeBoton btn" *ngFor="let poke of equipoActivo" [disabled]="poke.disabled" (click)="sendActionAndServerMessage('cambio',poke.id)"
+              <button class="pokeBoton btn" [disabled]="poke.deshabilitado" *ngFor="let poke of equipoActivo" (click)="sendActionAndServerMessage('cambio',poke.id)"
                       [value]="poke.id"><img [src]="'/assets/OnBattle/'+poke.id+'.gif'" [alt]="poke.nombre"> {{ poke.nombre }}
               </button>
             </div>

@@ -26,5 +26,5 @@ export class Pokemon {
 
   public vel: number = -1;
 
-  public disabled: boolean = false;
+  public deshabilitado: boolean = false;
 }

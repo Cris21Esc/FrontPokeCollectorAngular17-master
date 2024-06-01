@@ -12,6 +12,7 @@ import { Pokemon } from '../../pokemon';
   styleUrls: ['./combate.component.css']
 })
 export class CombateComponent implements OnInit, OnDestroy {
+  pokeIsDown:boolean=false;
   pokeIdArray:number=0;
   pokeActivo: Pokemon | null = null;
   pokeContraActivo: Pokemon | null = null;
@@ -43,37 +44,37 @@ export class CombateComponent implements OnInit, OnDestroy {
                 // @ts-ignore
                 this.equipoActivo.push(response);
                 // @ts-ignore
-                this.equipoActivo[0].disabled = false;
+                this.equipoActivo[0].deshabilitado = true;
                 this.servicePokemon.findpokemonbyid(equipo.pokemon2_id.toString()).subscribe(
                   (response) => {
                     // @ts-ignore
                     this.equipoActivo.push(response);
                     // @ts-ignore
-                    this.equipoActivo[1].disabled = false;
+                    this.equipoActivo[1].deshabilitado = false;
                     this.servicePokemon.findpokemonbyid(equipo.pokemon3_id.toString()).subscribe(
                       (response) => {
                         // @ts-ignore
                         this.equipoActivo.push(response);
                         // @ts-ignore
-                        this.equipoActivo[2].disabled = false;
+                        this.equipoActivo[2].deshabilitado = false;
                         this.servicePokemon.findpokemonbyid(equipo.pokemon4_id.toString()).subscribe(
                           (response) => {
                             // @ts-ignore
                             this.equipoActivo.push(response);
                             // @ts-ignore
-                            this.equipoActivo[3].disabled = false;
+                            this.equipoActivo[3].deshabilitado = false;
                             this.servicePokemon.findpokemonbyid(equipo.pokemon5_id.toString()).subscribe(
                               (response) => {
                                 // @ts-ignore
                                 this.equipoActivo.push(response);
                                 // @ts-ignore
-                                this.equipoActivo[4].disabled = false;
+                                this.equipoActivo[4].deshabilitado = false;
                                 this.servicePokemon.findpokemonbyid(equipo.pokemon6_id.toString()).subscribe(
                                   (response) => {
                                     // @ts-ignore
                                     this.equipoActivo.push(response);
                                     // @ts-ignore
-                                    this.equipoActivo[5].disabled = false;
+                                    this.equipoActivo[5].deshabilitado = false;
                                     // @ts-ignore
                                     this.idPokeActivo = this.equipoActivo[0].id;
                                     this.servicePokemon.movimientosPokemon(this.idPokeActivo).subscribe(data => {
@@ -140,8 +141,6 @@ export class CombateComponent implements OnInit, OnDestroy {
     this.pokeActivo = this.equipoActivo[0];
     // @ts-ignore
     this.pokeActivo.saludActual = this.pokeActivo.hp;
-    this.pokeActivo.disabled = true;
-
     this.cleanupSubscriptions();
     if (this.userId) {
       this.chatService.joinRoom(room, this.userId);
@@ -191,13 +190,14 @@ export class CombateComponent implements OnInit, OnDestroy {
                 this.actualizarBarraContra(data.danioAction1);
               }, 750);
               setTimeout(()=>{
-                // @ts-ignore
+                // @ts-ignore                
                 if(this.pokeContraActivo.saludActual<=0){
-                  this.derrotarPoke(this.pokeIdArray);
+                  this.executeActions("debilitado");
+                  this.chatService.setPokeIsDown(this.roomId,true);
+                  // @ts-ignore
+                  this.pokeActivo.deshabilitado=true;
                 }
               },3250);
-            }else{
-
             }
           }, 1000);
           setTimeout(() => {
@@ -213,7 +213,38 @@ export class CombateComponent implements OnInit, OnDestroy {
             pokeBotones.forEach(element => element.disabled = true)
           }, 3500);
         } else {
-          setTimeout(() => {
+            this.chatService.getPokeIsDown().subscribe((dataDown:{pokeDown:boolean})=>{
+              if(dataDown.pokeDown){
+                /* this.executeActions("cambiar"); crear accion para cambiar pokes*/
+              }else{
+                setTimeout(() => {
+                  if (pokeActivoContra) {
+                    this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+                  }
+                  setTimeout(() => {
+                    this.actualizarBarraUser(data.danioAction1);
+                  }, 750);
+                }, 1000);
+      
+                setTimeout(() => {
+                  this.executeActions(data.action2);
+                  if (pokeActivoUser) {
+                    this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+                  }
+                  setTimeout(() => {
+                    this.actualizarBarraContra(data.danioAction2);
+                  }, 750);
+                  // @ts-ignore
+                  let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                  botones.forEach(element => element.disabled = false);
+                  // @ts-ignore
+                  let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                  pokeBotones.forEach(element => element.disabled = true)
+                }, 3500);
+              }
+            });
+
+            /*          setTimeout(() => {
             if (pokeActivoContra) {
               this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
             }
@@ -237,6 +268,8 @@ export class CombateComponent implements OnInit, OnDestroy {
             let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
             pokeBotones.forEach(element => element.disabled = true)
           }, 3500);
+
+          }); */
         }
       });
     }
@@ -269,8 +302,8 @@ export class CombateComponent implements OnInit, OnDestroy {
     let porcentajeSalud = saludActual / maxSalud;
     let anchoNuevo = anchoContenedor * porcentajeSalud;
 
-    const duracion = 2000; // Duración de la animación en milisegundos
-    const fps = 60; // Frames por segundo
+    const duracion = 2000; 
+    const fps = 60;
     const interval = duracion / fps;
     const pasos = (barra.offsetWidth - anchoNuevo) / (duracion / interval);
 
@@ -339,7 +372,7 @@ export class CombateComponent implements OnInit, OnDestroy {
     }
     const flashes = document.querySelectorAll('.flash1, .flash2, .flash3, .flash4, .flash5, .flash6');
     flashes.forEach((flash, index) => {
-      const htmlFlash = flash as HTMLElement; // Casting a HTMLElement
+      const htmlFlash = flash as HTMLElement;
       htmlFlash.style.animation = 'none';
       htmlFlash.offsetHeight;
       const durations = ['0.65s', '0.35s', '0.75s', '1s', '1.25s', '0.75s'];
@@ -420,9 +453,6 @@ export class CombateComponent implements OnInit, OnDestroy {
           // @ts-ignore
           let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
           botones.forEach(element => element.disabled = false);
-          // @ts-ignore
-          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-          pokeBotones.forEach(element => element.disabled = true)
         }, 2250);
       }
       if (pokeActivoContra) {
