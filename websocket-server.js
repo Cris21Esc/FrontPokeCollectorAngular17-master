@@ -133,6 +133,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('recibirAccion', (data) => {
+    console.log(data);
     const {userId, action, danio,room, vel} = data;
     if (rooms[room].actions.length > 0) {
       if(rooms[room].actions[0].vel > data.vel){
@@ -150,24 +151,23 @@ io.on('connection', (socket) => {
 
       rooms[room].actions = [];
     } else {
-      rooms[room].actions.push({userId,action,danio,room,vel});
+      if(action.includes("cambio")){
+        rooms[room].actions.push({userId,action,danio,room,vel:9999});
+      }else{
+        rooms[room].actions.push({userId,action,danio,room,vel});
+      }
     }
   });
   
   socket.on('setPokeActivo',(data)=>{
-    const {roomId,userId,pokeActivoId} = data;
+    const {roomId,userId,pokeActivoId,equipoActivo} = data;
     if(rooms[roomId].pokesActivos.length > 0){
-      io.to(roomId).emit("getPokesActivos",{user1:rooms[roomId].pokesActivos[0].userId,pokeUser1:rooms[roomId].pokesActivos[0].pokeActivoId,user2:data.userId,pokeUser2:data.pokeActivoId})
+      io.to(roomId).emit("getPokesActivos",{user1:rooms[roomId].pokesActivos[0].userId,pokeUser1:rooms[roomId].pokesActivos[0].pokeActivoId,equipoActivo1:rooms[roomId].pokesActivos[0].equipoActivo,user2:data.userId,pokeUser2:data.pokeActivoId,equipoActivo2:data.equipoActivo})
     }else{
-      rooms[roomId].pokesActivos.push({userId,pokeActivoId});
+      rooms[roomId].pokesActivos.push({userId,pokeActivoId,equipoActivo});
     }
   });
 
-  socket.on('setPokeIsDown',data=>{
-    const {roomId,pokeDown} = data;
-    rooms[roomId].pokeDown = pokeDown;
-    io.to(roomId).emit('getPokeIsDown',{pokeDown:rooms[roomId].pokeDown})
-  })
 });
 
 

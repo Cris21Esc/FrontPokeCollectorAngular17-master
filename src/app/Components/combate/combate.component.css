@@ -171,7 +171,7 @@
   border-radius: 2px;
   display: grid;
   z-index: auto;
-  grid-template-columns: 2.7fr 10fr 0.4fr;
+  grid-template-columns: 0.1fr 10fr 0.4fr;
   grid-template-rows: repeat(6,1fr);
   background-size: 100% 100%;
   background-repeat: no-repeat;
@@ -179,11 +179,26 @@
 }
 
 .barraContra{
-  grid-area: 4 / 2 / 5 / 10;
+  grid-area: 4 / 3 / 5 / 10;
 }
 
 .barraUser{
-  grid-area: 4/3/5/11;
+  grid-area: 3/4/4/11;
+}
+
+.pokeInfoUser .hpUser{
+  position: relative;
+  grid-area: 3 / 3 / 4 / 4;
+}
+
+.pokeInfoContra .hpContra{
+  position: relative;
+  grid-area: 4 / 2/ 5 / 3;
+}
+
+.pokeInfoUser .saludNumero{
+  grid-area: 4 / 3 / 5 / 11;
+  text-align: center;
 }
 
 .psUser{

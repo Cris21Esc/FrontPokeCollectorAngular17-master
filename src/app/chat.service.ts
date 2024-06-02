@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { io, Socket } from 'socket.io-client';
 import { Observable } from 'rxjs';
+import { Pokemon } from './pokemon';
 
 @Injectable({
   providedIn: 'root'
@@ -52,17 +53,19 @@ export class ChatService {
     });
   }
 
-  setPokeActivos(roomId:string,userId:string,pokeActivoId:number){
-    const data = { roomId:roomId,userId:userId,pokeActivoId:pokeActivoId};
+  setPokeActivos(roomId:string,userId:string,pokeActivoId:number,equipoActivo:Pokemon[]){
+    const data = { roomId:roomId,userId:userId,pokeActivoId:pokeActivoId,equipoActivo:equipoActivo};
+    console.log(data);
     this.socket.emit('setPokeActivo',data);
   }
-  setPokeIsDown(roomId:string,pokeDown:boolean){
-    this.socket.emit("setPokeIsDown",{roomId:roomId,pokeDown:pokeDown})
+  setPokeIsDown(roomId:string,userId:string){
+    const data = { userId:userId,action:"esperar",danio:0,room:roomId,vel:-1};
+    this.socket.emit("enviarAccion",data)
   }
 
-  getPokeActivos():Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>{
-    return new Observable<{user1:string,pokeUser1:number,user2:string,pokeUser2:number}>(observer=>{
-      this.socket.on("getPokesActivos",(data:{user1:string,pokeUser1:number,user2:string,pokeUser2:number})=>{
+  getPokeActivos():Observable<{ user1: string, pokeUser1: number, equipoActivo1:Object[],user2: string, pokeUser2: number,equipoActivo2:Object[] }>{
+    return new Observable<{ user1: string, pokeUser1: number, equipoActivo1:Object[],user2: string, pokeUser2: number,equipoActivo2:Object[] }>(observer=>{
+      this.socket.on("getPokesActivos",(data:{ user1: string, pokeUser1: number, equipoActivo1:Object[],user2: string, pokeUser2: number,equipoActivo2:Object[] })=>{
         observer.next(data);
       });
       return () => {
