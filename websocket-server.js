@@ -12,7 +12,7 @@ const io = socketIO(server, {
     credentials: true
   }
 });
-
+/*sudo ufw allow 3000 */
 const rooms = {};
 const waitingUsers = [];
 
