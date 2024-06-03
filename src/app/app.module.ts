@@ -17,7 +17,7 @@ import { MenuPrincipalComponent } from './Components/menu-principal/menu-princip
 import {CombateComponent} from "./Components/combate/combate.component";
 import {ChatService} from "./chat.service";
 import { routes } from './app.routes';
-import {NgOptimizedImage} from "@angular/common";
+import { FooterComponent } from './Components/footer/footer.component';
 
 /*DECLARAMOS LOS NUEVO COMPONENTES*/
 @NgModule({
@@ -33,14 +33,15 @@ import {NgOptimizedImage} from "@angular/common";
     RegisterComponent,
     MenuPrincipalComponent,
     CombateComponent,
+    FooterComponent,
   ],
-    imports: [
-        BrowserModule,
-        FormsModule,
-        RouterModule.forRoot(routes),
-        HttpClientModule,
-        NgOptimizedImage
-    ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    RouterModule.forRoot(routes),
+    HttpClientModule
+  ],
+  exports: [RouterModule],
   providers: [
     ServiceusersService,
     ChatService
@@ -48,3 +49,4 @@ import {NgOptimizedImage} from "@angular/common";
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+export class AppRoutingModule { }

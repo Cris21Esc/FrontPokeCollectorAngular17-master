@@ -21,8 +21,7 @@ export class PokemonComponent implements OnInit, AfterViewInit {
   userinfo: any;
   id: string = "";
   user = localStorage.getItem("token");
-  successMessage: string | null = null;
-  errorMessage: string | null = null;
+
   userid: any;
 
   // pokemon info por id
@@ -47,8 +46,11 @@ export class PokemonComponent implements OnInit, AfterViewInit {
 
   originalAudioSrc: string = '/assets/sonidos/route1mix.mp3';
 
+  //mensajes de chat 
 
-  //RECUPERAR BOTON Y ELEMENTO BACKPJ PARA ANIMACION LANZAR POKEMON 
+  chatMessages: { sender: string, message: string }[] = [];
+  isLoading: any;
+
   constructor(
     private router: Router, 
     private serviciosPokemon: ServicepokemonsService, 
@@ -82,14 +84,8 @@ export class PokemonComponent implements OnInit, AfterViewInit {
     this.serviciosPokemon.findpokemonbyid(id).subscribe(
       (response) => {
         this.pokemon = response;
-        this.successMessage = "Pokemon añadido exitosamente";
-        this.errorMessage = "";
-        console.log("El pokemon se encontró", this.pokemon);
       },
       (error) => {
-        this.errorMessage = "Error al añadir el pokemon";
-        this.successMessage = "";
-        console.log("no se encontro el pokemon");
       }
     );
   }
@@ -196,9 +192,10 @@ export class PokemonComponent implements OnInit, AfterViewInit {
     const backpj = document.getElementById('backpj') as HTMLDivElement;
     if (backpj) {
       backpj.classList.remove('animationpj');
-      void backpj.offsetWidth; // Forzar un reflow
+      void backpj.offsetWidth;
       backpj.classList.add('animationpj');
     }
+
   }
 
   deleteanimation(){
@@ -223,15 +220,15 @@ export class PokemonComponent implements OnInit, AfterViewInit {
       if (this.audioPlayer) {
         this.audioPlayer.pause();
       }
-      const newAudioSrc = '/assets/sonidos/batalla2.mp3'; // Cambia esto al URL correcto de tu nuevo audio
+      const newAudioSrc = '/assets/sonidos/batalla2.mp3';
       if (this.audioPlayer) {
         this.audioPlayer.src = newAudioSrc;
         this.audioPlayer.load();
         this.audioPlayer.play();
       }
-      console.log("SE ENCONTRO POKEMON 5s")
       setTimeout(() => {
         this.collisionDetected = true;
+        this.chatMessages = [];
 
       }, 5000);
     }
@@ -248,44 +245,60 @@ export class PokemonComponent implements OnInit, AfterViewInit {
     }
     
     this.collisionDetected = false;
+    this.chatMessages = [];
   }
 
   addPokemon(): void {
+
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+
     const rand=Math.floor(Math.random() * 3) + 1;
     this.user_poke_info.userPokemonId = this.id;
     console.log(rand)
     if(rand===1){
     this.serviciosPokemon.addpokemon(this.user_poke_info).subscribe(
       (response) => {
-        console.log("POKEMON AÑADIDO EXITOSAMENTE");
         //EL POKEMON SE CAPTURA
+        setTimeout(() => {
+          this.chatMessages.push({ sender: 'Sistema', message: '¡Pokemon añadido exitosamente!' });
+        },5000);
         setTimeout(() => {
           this.closeCollisionOverlay();
           this.generarpokemon();
-        }, 5000);
+          this.isLoading = false;
+        }, 10000);
       },
     (error) => {
-      console.log("ERROR AL AÑADIR EL POKEMON");
+      setTimeout(() => {
+        this.chatMessages.push({ sender: 'Sistema', message: 'El pokemon huyó del combate.' });
+      },5000);
       setTimeout(() => {
         this.closeCollisionOverlay();
         this.generarpokemon();
-      }, 5000);
+        this.isLoading = false;
+      }, 7500);
     }
     );
   }
     //NO SE CAPTURA, NO PASA NADA
     else if(rand===2){
-      console.log("EL POKEMON TE OBSERVA");
+      setTimeout(() => {
+        this.chatMessages.push({ sender: 'Sistema', message: 'El pokemon te observa.' });
+        this.isLoading = false;
+      }, 5000);
     }
-
     //EL POKEMON HUYE DEL COMBATE
     else if(rand===3){
-      console.log("EL POKEMON HUYÓ DEL COMBATE")
+      setTimeout(() => {
+        this.chatMessages.push({ sender: 'Sistema', message: 'El pokemon huyó del combate.' });
+      },5000);
       setTimeout(() => {
         this.closeCollisionOverlay();
         this.generarpokemon();
-      }, 5000);
+        this.isLoading = false;
+      }, 7500);
     }
-
   }
 }

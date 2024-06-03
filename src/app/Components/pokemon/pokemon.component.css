@@ -3,15 +3,15 @@ body {
   color: whitesmoke;
   display: flex;
   justify-content: center;
+  height: 100%;
 }
 
 .capture {
-  margin-top: 10%;
   position: relative;
-  width: 607px; 
-  height: 950px;
+  width: 512px; 
+  height: 512px;
   overflow: hidden;
-  background-image: url('/assets/fondo/cespedvacio.jpg');
+  background-image: url('/assets/fondo/grass.jpg');
   background-repeat: no-repeat;
   display: flex;
   justify-content: flex-end;
@@ -19,19 +19,20 @@ body {
 
 .zonacaptura {
   width: 198px;
-  height: 440px;
+  height: 330px;
   overflow: hidden;
   align-self: center;
   background-repeat: no-repeat;
   display: flex;
   justify-content: flex-end;
-  flex-wrap: wrap; /* Permite que los elementos se envuelvan a la siguiente fila */
+  flex-wrap: wrap;
 }
 
 .hierba {
   width: 66px; 
-  height: 88px;
-  background-image: url('/assets/objetos/hierbgrande (1).png');
+  height: 66px;
+  background-repeat: no-repeat;
+  background-image: url('/assets/objetos/hierba.png');
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,9 +40,9 @@ body {
 
 .pj {
   position: absolute;
-  width: 64px;
-  height: 64px;
-  background-image: url('/assets/pjs/personaje.png');
+  width: 32px;
+  height: 47px;
+  background-image: url('/assets/pjs/0.png');
 }
 
 .pokemon {
@@ -55,39 +56,77 @@ body {
 
 .backpj {
   position: absolute;
-  background-image: url('/assets/pjs/pjs2.png');
+  background-image: url('/assets/pjs/combat0.png');
   background-repeat: no-repeat;
-  background-position: 35px 10px;
-  width: 155px; /* Preservar el ancho del contenedor */
-  height: 160px; /* Preservar el alto del contenedor */
+  background-position: 0px 0px;
+  width: 128px;
+  height: 140px;
   left: 100px;
-  top: 200px;
+  top: 232px;
 }
-
-.pokeballcatch{
+.pokeball{
   position: absolute;
-  background-image: url('/assets/objetos/pokeballcatch.png');
+  background-image: url('/assets/objetos/throwdef1.png');
   background-repeat: no-repeat;
-  background-position: 35px 0px;
-  width: 150px; /* Preservar el ancho del contenedor */
-  height: 40px; /* Preservar el alto del contenedor */
+  background-position: 0px 0px;
+  width: 600px;
+  height: 61px;
   left: 100px;
-  top: 200px;
-
+  top: 245px;
 }
 
 .animationpj{
   animation: pjpoke 1s steps(5);
 }
 
+.pokeball.moving {
+  animation: pokeballt 4.5s steps(25) forwards, moveToPokemon 1s forwards;
+}
+
+
+@keyframes pokeballt {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0px -1563px;
+  }
+}
 @keyframes pjpoke {
   0% {
     background-position: 0 0;
   }
   100% {
-    background-position: -810px 10px;
+    background-position: -640px 0px;
   }
 }
+@keyframes moveToPokemon {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(320px, -122px);
+  }
+}
+
+@keyframes catch {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0px -552px;
+  }
+}
+
+@keyframes catch2 {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0px -450px;
+  }
+}
+
 
 .animate {
   animation: movedown 0.5s steps(4) infinite;
@@ -110,7 +149,7 @@ body {
       background-position: 0 0;
   }
   100% {
-      background-position: 256px 0;
+      background-position: 128px 0;
   }
 }
 
@@ -119,7 +158,7 @@ body {
       background-position: 0 35%;
   }
   100% {
-      background-position: -256px 35%;
+      background-position: -128px 35%;
   }
 }
 
@@ -128,7 +167,7 @@ body {
       background-position: 0 65%;
   }
   100% {
-      background-position: -256px 65%;
+      background-position: -128px 65%;
   }
 }
 
@@ -137,54 +176,8 @@ body {
       background-position: 0 100%;
   }
   100% {
-      background-position: -256px 100%;
+      background-position: -128px 100%;
   }
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
-
-/* Estilos para el formulario */
-form {
-  color: black;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-label {
-  display: block;
-  margin-bottom: 10px;
-}
-
-input[type="text"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 3px;
-  box-sizing: border-box;
-}
-
-input[type="submit"] {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 3px;
-  cursor: pointer;
-  justify-content: center;
-}
-
-input[type="submit"]:hover {
-  background-color: #0056b3;
 }
 
 .collision-overlay {
@@ -261,4 +254,25 @@ input[type="submit"]:hover {
 
 .option:hover {
   background-color: #e0e0e0;
+}
+
+
+.chat-box {
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.chat-box p {
+  margin: 5px 0;
+  color: #000000;
+
+}
+
+strong {
+  color: #000000;
 }

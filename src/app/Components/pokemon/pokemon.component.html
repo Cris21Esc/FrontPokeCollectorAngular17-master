@@ -13,22 +13,25 @@
             [class.animateup]="isMovingup" 
             [class.animateleft]="isMovingleft"></div>
     </div>
-    <div class="pokeballcatch"></div>
-
     <div *ngIf="pokemon" id="collisionOverlay" class="collision-overlay" [hidden]="!collisionDetected">
         <div class="collision-content">
-            <div class="pokemon" [style.background-image]="'url(/assets/OnBattle/' + pokemon.num_pokedex + '.gif)'" style="background-size: contain; background-position: center;"></div>
-            <div class="backpj" id="backpj"></div>
-            <div class="battle-menu">
-                <div class="question-box">
-                    <p>¿Qué quieres hacer? <strong></strong></p>
-                </div>
-                <div class="options-box">
-                    <button class="option" id="animation" (click)="click()" (click)="addPokemon()">POKEBALL</button>
-                    <button class="option" (click)="closeCollisionOverlay()" (click)="generarpokemon()">HUIDA</button>
-                </div>
+          <div class="pokemon" [style.background-image]="'url(/assets/OnBattle/' + pokemon.num_pokedex + '.gif)'" style="background-size: contain; background-position: center;"></div>
+          <div class="backpj" id="backpj"></div>
+          <div class="battle-menu">
+            <div class="question-box">
+              <p>¿Qué quieres hacer? <strong></strong></p>
             </div>
+            <div class="options-box">
+              <button [disabled]="isLoading" class="option" (click)="click()" (click)="addPokemon()">POKEBALL</button>
+              <button [disabled]="isLoading" class="option" (click)="closeCollisionOverlay()" (click)="generarpokemon()">HUIDA</button>
+            </div>
+            <div class="chat-box">
+              <div *ngFor="let message of chatMessages">
+                <p><strong>{{ message.sender }}:</strong> {{ message.message }}</p>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-    
+      </div>
 </body>
+<app-footer></app-footer>

@@ -6,8 +6,11 @@
 body{
   font-family: CustomFont;
 }
+.addpoke{
+  background: rgba(255, 255, 255, 0.822);
+}
 .fondo{
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+  background-color: rgba(107, 115, 145, 0.8);
   color: whitesmoke;
 }
 .pokecarta {
@@ -99,7 +102,7 @@ button:hover{
 }
 
 #crearEquipoDiv{
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+  background-color: rgba(107, 115, 145, 0.8);
 
 }
 
@@ -119,7 +122,7 @@ button:hover{
   justify-content: center;
   align-items: center;
   gap: 10px;
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+  background-color: rgba(107, 115, 145, 0.8);
   padding: 20px;
 }
 .pokemon-slot {

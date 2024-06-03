@@ -1,9 +1,20 @@
 /* You can add global styles to this file, and also import other style files */
 @import "bootstrap/dist/css/bootstrap.css";
-html{
-  background-color: #212529;
-  min-width: 400px;
+
+body{
+  background-image: url('assets/fondo/fondo.jpg');
+  background-size: auto;
+  background-repeat: repeat-x repeat-y;
+
 }
+
+body.black-background {
+  background-color: black !important;
+}
+
+/* html{
+  background-color: #212529;
+} */
 
 @font-face {
   font-family: 'CustomFont';
@@ -11,7 +22,7 @@ html{
 }
 
 .general{
-  font-family: CustomFont, serif;
+  font-family: CustomFont;
 }
 
 @keyframes fadeIn {

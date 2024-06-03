@@ -27,6 +27,6 @@ export class HomeComponent implements OnInit {
   }
 
   random() {
-    this.numberrandom = Math.floor(Math.random() * 4);
+    this.numberrandom = Math.floor(Math.random() * 6);
   }
 }

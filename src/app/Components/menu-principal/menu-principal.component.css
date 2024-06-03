@@ -1,0 +1,154 @@
+@font-face {
+  font-family: "CustomFont";
+  src: url("/assets/ttfs/Bitsential.otf");
+}
+h3{
+    width: 100%;
+    text-align: center;
+}
+.text {
+  color: #ff0000;
+}
+
+.menudiv, .menudivlogout{
+  background-color: rgba(0, 0, 0, 0.8);
+  color: whitesmoke;
+}
+
+@media (max-width: 800px) {
+  .general {
+    display: none;
+  }
+
+  .logo-container {
+    display: block;
+  }
+}
+
+@media (min-width: 801px) {
+  .logo-container {
+    display: none;
+  }
+  .menu-content {
+    display: none;
+  }
+  .hamburger-menu.show[_ngcontent-ng-c2379628630] {
+    display: none;
+  }
+  .hamburger-menu.show[_ngcontent-ng-c2290919478]{
+    display: none;
+  }
+}
+
+@media (max-width:600px){
+  .hamburger-menu.show[_ngcontent-ng-c2290919478]{
+    font-size: 5vw;
+  }
+    h3{
+        font-size: 5vw;
+    }
+    .text {
+        font-size: 5vw;
+
+    }
+  
+}
+
+@media (max-width:350px){
+  .hamburger-menu[_ngcontent-ng-c2379628630] {
+      font-size: 5vw;
+  }
+  h3{
+      font-size: 5vw;
+  }
+  .text {
+      font-size: 5vw;
+
+  }
+
+}
+
+/* Hamburger menu button aligned to the right */
+.boton {
+  background-color: aliceblue;
+}
+
+.menulogo {
+  left: 10px;
+  top: 10px;
+  font-family: CustomFont;
+  position: fixed;
+  width: 40px;
+  z-index: 10;
+  height: 35px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid transparent;
+  border-radius: 10%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: whitesmoke;
+}
+
+.close-button {
+  position: absolute;
+  cursor: pointer;
+  color: white;
+  right: 10px;
+}
+
+/* Hamburger menu overlay styles */
+.hamburger-menu {
+  font-family: CustomFont;
+  color: whitesmoke;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  font-size: 3vw;
+  width: 50%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  transform: translateX(-100%);
+}
+
+.hamburger-menu.show {
+  display: block;
+  transform: translateX(0);
+}
+
+.menu-content {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Styles for menu items */
+.sidenav-nav-item {
+  width: 100%;
+  height: 8%;
+  text-align: center;
+  margin-bottom: 0.325rem;
+}
+
+.sidenav-nav-link {
+  display: flex;
+  align-items: center;
+  height: 3rem;
+  color: #f3f3f3;
+  text-decoration: none;
+  border-radius: 0.625rem;
+  margin-top: 35px;
+  transition: all 0.3s ease;
+}
+
+.sidenav-link-text {
+  margin-left: 1.5rem;
+}
+
+.sidenav-nav-item:hover .sidenav-nav-link {
+  background-color: #fff;
+  color: #000;
+}

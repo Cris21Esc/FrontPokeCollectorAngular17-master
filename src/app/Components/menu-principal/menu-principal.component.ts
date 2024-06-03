@@ -1,6 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from "@angular/router";
-import { ServiceusersService} from "../../service-users.service";
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { ServiceusersService } from '../../service-users.service';
+
+interface SideNavToggle {
+  screenWidth: number;
+  collapsed: boolean;
+}
 
 @Component({
   selector: 'app-menu-principal',
@@ -9,6 +14,11 @@ import { ServiceusersService} from "../../service-users.service";
 })
 export class MenuPrincipalComponent implements OnInit {
   links: string[] = [];
+  isMenuOpen = false; 
+  collapsed = true;
+  screenWidth = 0;
+
+  @Output() onToggleSideNav: EventEmitter<SideNavToggle> = new EventEmitter();
 
   constructor(private router: Router, private serviceUsers: ServiceusersService) {}
 
@@ -21,12 +31,9 @@ export class MenuPrincipalComponent implements OnInit {
       this.updateLinks();
     });
   }
-  isLoggedIn(){
-    if (localStorage.getItem('user') != null) {
-      return true;
-    } else {
-      return false;
-    }
+
+  isLoggedIn() {
+    return localStorage.getItem('user') !== null;
   }
 
   logout() {
@@ -35,10 +42,22 @@ export class MenuPrincipalComponent implements OnInit {
   }
 
   updateLinks() {
-    if (localStorage.getItem('user') != null && localStorage.getItem("token") != null) {
-      this.links = ['inicio', 'pokedex','user','pokemon','combate']; // Menús cuando el usuario está conectado
+    if (localStorage.getItem('user') !== null && localStorage.getItem('token') !== null) {
+      this.links = ['inicio', 'pokedex', 'user', 'pokemon', 'combate'];
     } else {
-      this.links = ['inicio', 'login','register']; // Menús cuando el usuario no está conectado
+      this.links = ['inicio', 'login', 'register'];
     }
+  }
+
+  toggleCollapse() {
+    this.collapsed = !this.collapsed;
+    this.isMenuOpen = !this.isMenuOpen; 
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
+  }
+
+  closeSidenav() {
+    this.collapsed = false;
+    this.isMenuOpen = false;
+    this.onToggleSideNav.emit({ collapsed: this.collapsed, screenWidth: this.screenWidth });
   }
 }

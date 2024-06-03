@@ -39,7 +39,7 @@ export class RegisterComponent implements OnInit {
     );
   }
   random(){
-    this.numerorandom=Math.floor(Math.random()*10)
+    this.numerorandom=Math.floor(Math.random()*9)
   }
 
   onSubmit() {

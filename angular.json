@@ -31,27 +31,26 @@
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
-              "src/pokeball.ico",
+              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.min.js"]
+            "scripts": []
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "1mb",
-                  "maximumError": "2mb"
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "4kb",
-                  "maximumError": "8kb"
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
                 }
               ],
               "outputHashing": "all"
@@ -91,7 +90,7 @@
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/pokeball.ico",
+              "src/favicon.ico",
               "src/assets"
             ],
             "styles": [

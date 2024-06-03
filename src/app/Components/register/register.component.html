@@ -1,36 +1,37 @@
 <div class="container p-4 my-5">
-  <div class="row fadeAnim m-0 rounded-4">
-      <div class="col-lg-6 col-md-12 d-flex justify-content-center align-content-center">
-          <div class="row flex-column justify-content-center w-100">
-              <div class="col-lg-12 w-100 p-4">
-                  <h1 class="text-center">Regístrate</h1>
-              </div>
-              <div class="col-lg-12 w-100 p-4">
-                  <form (ngSubmit)="onSubmit()">
-                      <div *ngIf="registroexito" class="alert">Se ha registrado con éxito.</div>
-                      <div *ngIf="registroexito === false" class="error-alert">Error al registrar el usuario</div>
-                      <div class="form-group mb-5">
-                          <label for="nombre" class="form-label">Nombre</label>
-                          <input type="text" class="form-control" id="nombre" aria-describedby="nombre" name="nombre" required [(ngModel)]="userData.nombre">
-                      </div>
-                      <div class="form-group mb-5">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="email" aria-describedby="email" name="email" required [(ngModel)]="userData.email">
-                      </div>
-                      <div class="form-group mb-3">
-                          <label for="contrasena" class="form-label">Contraseña</label>
-                          <input type="password" class="form-control" id="password" aria-describedby="password" name="contrasena" required [(ngModel)]="userData.contrasena">
-                      </div>
-                      <div class="p-2 text-center"><button type="submit" class="btn btn-primary">Regístrate</button></div>
-                      <div class="text-center"><span>Si estás registrado <a href="/login">inicia sesión aquí</a></span></div>
-                  </form>
-              </div>
-          </div>
-      </div>
-      <div class="col-lg-6 col-md-12 image">
-          <picture>
-              <img [src]="'/assets/fondos/' + numerorandom + '.jpg'">
-          </picture>
-      </div>
+    <div class="row fadeAnim m-0 rounded-4">
+        <div class="col-lg-6 col-md-12 d-flex justify-content-center align-content-center">
+            <div class="row flex-column justify-content-center w-100">
+                <div class="col-lg-12 w-100 p-4">
+                    <h1 class="text-center">Regístrate</h1>
+                </div>
+                <div class="col-lg-12 w-100 p-4">
+                    <form (ngSubmit)="onSubmit()">
+                        <div *ngIf="registroexito" class="alert">Se ha registrado con éxito.</div>
+                        <div *ngIf="registroexito === false" class="error-alert">Error al registrar el usuario</div>
+                        <div class="form-group mb-5">
+                            <label for="nombre" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" aria-describedby="nombre" name="nombre" required [(ngModel)]="userData.nombre">
+                        </div>
+                        <div class="form-group mb-5">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" aria-describedby="email" name="email" required [(ngModel)]="userData.email">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="contrasena" class="form-label">Contraseña</label>
+                            <input type="password" class="form-control" id="password" aria-describedby="password" name="contrasena" required [(ngModel)]="userData.contrasena">
+                        </div>
+                        <div class="p-2 text-center"><button type="submit" class="btn btn-primary">Regístrate</button></div>
+                        <div class="text-center"><span>Si estás registrado <a href="/login">inicia sesión aquí</a></span></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-12 image">
+            <picture>
+                <img [src]="'/assets/fondos/' + numerorandom + '.jpg'">
+            </picture>
+        </div>
+    </div>
   </div>
-</div>
+  <app-footer></app-footer>

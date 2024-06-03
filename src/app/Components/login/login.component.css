@@ -14,6 +14,7 @@
 }
 .row > *{
   padding-right: 0;
+  background-color: white;
 }
 .fadeAnim {
   animation: fadeIn 0.7s ease forwards;
@@ -23,7 +24,7 @@
   flex: 1;
   text-align: right; 
   width: 30%;
-  height: auto;
+  height: 60%;
   border-radius: 10px;
   display: flex;
   justify-content: center;

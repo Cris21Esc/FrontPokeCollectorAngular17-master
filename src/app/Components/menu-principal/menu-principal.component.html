@@ -1,8 +1,53 @@
 <div class="row p-0 m-0 general">
-  <div class="col text-center text-bg-dark pt-3 pb-4" *ngFor="let link of links" (click)="navigate(link)">
-    <span class="d-flex align-content-center justify-content-center">{{ link }}</span>
+  <!-- Menu grande -->
+  <div
+    class="col text-center menudiv pt-3 pb-4"
+    *ngFor="let link of links"
+    (click)="navigate(link)"
+  >
+    <span class="d-flex align-content-center justify-content-center">{{
+      link
+    }}</span>
   </div>
-  <div class="col text-center text-bg-dark pt-3 pb-4" *ngIf="isLoggedIn()" (click)="logout()">
-    <span class="d-flex align-content-center justify-content-center">logout</span>
+  <div
+    class="col text-center menudivlogout pt-3 pb-4"
+    *ngIf="isLoggedIn()"
+    (click)="logout()"
+  >
+    <span class="d-flex align-content-center justify-content-center"
+      >logout</span
+    >
+  </div>
+</div>
+
+<!-- Boton -->
+<div
+  class="logo-container"
+  [ngClass]="collapsed ? 'logo-container-collapsed' : ''"
+>
+  <button class="menulogo" (click)="toggleCollapse()">☰</button>
+</div>
+
+<!-- Hamburguesa -->
+<div class="hamburger-menu" [ngClass]="{ show: isMenuOpen }">
+  <div class="menu-content">
+    <h3>
+      <span class="text sidenav-nav-item">Poke</span><span>Collector</span>
+    </h3>
+    <div class="close-button" (click)="closeSidenav()">✕</div>
+    <div
+      class="sidenav-nav-item"
+      *ngFor="let link of links"
+      (click)="navigate(link)"
+    >
+      <a class="sidenav-nav-link">
+        <span class="sidenav-link-text">{{ link }}</span>
+      </a>
+    </div>
+    <div class="sidenav-nav-item" *ngIf="isLoggedIn()" (click)="logout()">
+      <a class="sidenav-nav-link">
+        <span class="sidenav-link-text">logout</span>
+      </a>
+    </div>
   </div>
 </div>

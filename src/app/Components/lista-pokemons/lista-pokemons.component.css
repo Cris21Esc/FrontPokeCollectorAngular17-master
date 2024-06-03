@@ -3,17 +3,31 @@
   src: url('/assets/ttfs/Bitsential.otf');
 }
 
+
+.pokecarta {
+  max-width: 100%;
+  overflow: hidden; 
+}
 .row{
   font-family: CustomFont;
+  margin-right: 0; 
+  margin-left: 0;
 
 }
 .text{
-  color: #ffcb05;
+  color: red;
+}
+.span1{
+  background: rgba(255, 255, 255, 0.822);
 
 }
+.p1{
+  background: rgba(255, 255, 255, 0.822);
+}
 .contenedor{
-  background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8));
+  background-color: rgba(107, 115, 145, 0.8);
   font-family: CustomFont;
+  width: 100%;
 
 }
 
@@ -68,8 +82,8 @@
 }
 
 .back img {
-  width: 50%;
-  height: 30%;
+  width: 30%;
+  height:18%;
 }
 
 .pokecarta:hover .front {
