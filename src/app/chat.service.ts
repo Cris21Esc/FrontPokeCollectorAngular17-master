@@ -10,7 +10,7 @@ export class ChatService {
   private socket: Socket;
 
   constructor() {
-    this.socket = io('http://localhost:3000', {
+    this.socket = io('http://ec2-3-209-208-3.compute-1.amazonaws.com:3000', {
       withCredentials: true,
     });
   }
