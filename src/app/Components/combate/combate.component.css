@@ -124,7 +124,7 @@
 .personajeContra{
   left: 0;
   position: relative;
-  grid-area: 4/15/12/17;
+  grid-area: 4/14/12/18;
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-image: url("/assets/pjs/enemy.png");

@@ -11,7 +11,7 @@ export class ServiceusersService {
   private isLoggedInSubject = new BehaviorSubject<boolean>(false);
 
   //URL obtiene el API de POKEMONS
-  private baseURL="http://localhost:8085/api";
+  private baseURL="https://ec2-54-236-155-35.compute-1.amazonaws.com:8443/api";
 
   private authToken: string | null = null;
 

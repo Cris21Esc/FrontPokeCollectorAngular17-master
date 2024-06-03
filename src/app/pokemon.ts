@@ -27,4 +27,6 @@ export class Pokemon {
   public vel: number = -1;
 
   public deshabilitado: boolean = false;
+
+  public derrotado: boolean = false;
 }

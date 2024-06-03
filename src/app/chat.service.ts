@@ -59,8 +59,9 @@ export class ChatService {
     this.socket.emit('setPokeActivo',data);
   }
   setPokeIsDown(roomId:string,userId:string){
+    console.log("envio derrotado");
     const data = { userId:userId,action:"esperar",danio:0,room:roomId,vel:-1};
-    this.socket.emit("enviarAccion",data)
+    this.socket.emit("recibirAccion",data)
   }
 
   getPokeActivos():Observable<{ user1: string, pokeUser1: number, equipoActivo1:Object[],user2: string, pokeUser2: number,equipoActivo2:Object[] }>{
