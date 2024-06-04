@@ -1,9 +1,10 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
-import {ChatService} from '../../chat.service';
-import {ServicepokemonsService} from '../../service-pokemons.service';
-import {Movimiento} from '../../movimiento';
-import {Subscription} from 'rxjs';
-import {Pokemon} from '../../pokemon';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ChatService } from '../../chat.service';
+import { ServicepokemonsService } from '../../service-pokemons.service';
+import { Movimiento } from '../../movimiento';
+import { Subscription } from 'rxjs';
+import { Pokemon } from '../../pokemon';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-combate',
@@ -32,7 +33,7 @@ export class CombateComponent implements OnInit, OnDestroy {
   private getPokeActivos: Subscription | undefined;
   lastMessagesCount: number = 10;
 
-  constructor(private chatService: ChatService, private servicePokemon: ServicepokemonsService) {
+  constructor(private router: Router,private chatService: ChatService, private servicePokemon: ServicepokemonsService) {
   }
 
   ngOnInit() {
@@ -257,45 +258,51 @@ export class CombateComponent implements OnInit, OnDestroy {
         console.log(this.debilitado + " " + this.userId);
         if (data.user1 === this.userId) {
           this.executeActions(data.action1);
-          if (data.action1.includes("cambio")) {
-            this.debilitado = false;
-            setTimeout(() => {
-              // @ts-ignore
-              this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
-              this.restartAnimation(pokeActivoUser, "moverPokeOut 0.5s linear");
-              // @ts-ignore
-              this.pokeActivo = this.equipoActivo[data.danioAction1];
-              this.servicePokemon.movimientosPokemon(this.pokeActivo.id).subscribe(movData => {
-                this.movimientos = movData;
+          if(data.action1.includes("ganar")){
+            this.servicePokemon.setWinnerAndLoser(data.user1,data.user2);
+            setTimeout(()=>{
+              this.router.navigate(["/combate"]);         
+            },2000);
+          }else{
+            if (data.action1.includes("cambio")) {
+              this.debilitado = false;
+              setTimeout(() => {
                 // @ts-ignore
-                this.animarBarra(this.pokeActivo.saludActual, this.pokeActivo.hp, ".psUser", 0);
-                setTimeout(() => {
-                  pokeActivoUser.style.backgroundSize = "100% 0";
-                  this.lanzarPokeballUser();
+                this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
+                this.restartAnimation(pokeActivoUser, "moverPokeOut 0.5s linear");
+                // @ts-ignore
+                this.pokeActivo = this.equipoActivo[data.danioAction1];
+                this.servicePokemon.movimientosPokemon(this.pokeActivo.id).subscribe(movData => {
+                  this.movimientos = movData;
+                  // @ts-ignore
+                  this.animarBarra(this.pokeActivo.saludActual, this.pokeActivo.hp, ".psUser", 0);
                   setTimeout(() => {
-                    // @ts-ignore
-                    pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.equipoActivo[data.danioAction1].id + '.png")';
-                    this.restartAnimation(pokeActivoUser, "moverPokeIn 0.5s linear");
+                    pokeActivoUser.style.backgroundSize = "100% 0";
+                    this.lanzarPokeballUser();
                     setTimeout(() => {
                       // @ts-ignore
-                      this.pokeActivo.deshabilitado = true;
-                      pokeActivoUser.style.backgroundSize = "100% 100%";
-                    }, 500);
-                  }, 1250);
-                }, 500);
-              });
-            }, 1000);
-            setTimeout(() => {
-              if (!data.action2.includes("esperar")) {
-                if (data.action2.includes("cambio")) {
-                  this.debilitado = false;
-                  setTimeout(() => {
-                    this.restartAnimation(pokeActivoContra, "moverPokeOut 0.5s linear");
+                      pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.equipoActivo[data.danioAction1].id + '.png")';
+                      this.restartAnimation(pokeActivoUser, "moverPokeIn 0.5s linear");
+                      setTimeout(() => {
+                        // @ts-ignore
+                        this.pokeActivo.deshabilitado = true;
+                        pokeActivoUser.style.backgroundSize = "100% 100%";
+                      }, 500);
+                    }, 1250);
+                  }, 500);
+                });
+              }, 1000);
+              setTimeout(() => {
+                if (!data.action2.includes("esperar")) {
+                  if (data.action2.includes("cambio")) {
+                    this.debilitado = false;
                     setTimeout(() => {
-                      pokeActivoContra.style.backgroundSize = "100% 0";
-                      // @ts-ignore
-                      this.pokeContraActivo = this.equipoActivoContra[data.danioAction2];
-                      // @ts-ignore
+                      this.restartAnimation(pokeActivoContra, "moverPokeOut 0.5s linear");
+                      setTimeout(() => {
+                        pokeActivoContra.style.backgroundSize = "100% 0";
+                        // @ts-ignore
+                        this.pokeContraActivo = this.equipoActivoContra[data.danioAction2];
+                        // @ts-ignore
                         this.animarBarra(this.pokeContraActivo.saludActual, this.pokeContraActivo.hp, ".psContra", 0);
                         this.lanzarPokeballContra();
                         setTimeout(() => {
@@ -314,156 +321,131 @@ export class CombateComponent implements OnInit, OnDestroy {
                               pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
                             }
                           }, 500);
-                      }, 1250);
-                    }, 500)
-                  }, 1000);
-                } else {
-                  setTimeout(()=>{
-                    if (pokeActivoUser) {
-                      this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
-                    }
+                        }, 1250);
+                      }, 500)
+                    }, 1000);
+                  } else {
                     setTimeout(() => {
-                      this.actualizarBarraUser(data.danioAction2);
+                      if (pokeActivoUser) {
+                        this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+                      }
                       setTimeout(() => {
-                        // @ts-ignore
-                        if (this.pokeActivo.saludActual <= 0) {
+                        this.actualizarBarraUser(data.danioAction2);
+                        setTimeout(() => {
                           // @ts-ignore
-                          this.pokeActivo.derrotado = true;
-                          console.log("derrotado");
-                          /*FALTA AÑADIR ANIMACION SALIDA*/
-                          this.debilitado = true;
-                          // @ts-ignore
-                          this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
-                          // @ts-ignore
-                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                          botones.forEach(element => element.disabled = true);
-                          // @ts-ignore
-                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                          for (let index = 0; index < pokeBotones.length; index++) {
+                          if (this.pokeActivo.saludActual <= 0) {
                             // @ts-ignore
-                            pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                          }
-                        } else {
-                          // @ts-ignore
-                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                          botones.forEach(element => element.disabled = false);
-                          // @ts-ignore
-                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                          for (let index = 0; index < pokeBotones.length; index++) {
+                            this.pokeActivo.derrotado = true;
+                            console.log("derrotado");
+                            /*FALTA AÑADIR ANIMACION SALIDA*/
+                            this.debilitado = true;
                             // @ts-ignore
-                            pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                            this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
+                            // @ts-ignore
+                            let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                            botones.forEach(element => element.disabled = true);
+                            // @ts-ignore
+                            let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                            for (let index = 0; index < pokeBotones.length; index++) {
+                              // @ts-ignore
+                              pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                            }
+                            this.checkPokes();
+                          } else {
+                            // @ts-ignore
+                            let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                            botones.forEach(element => element.disabled = false);
+                            // @ts-ignore
+                            let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                            for (let index = 0; index < pokeBotones.length; index++) {
+                              // @ts-ignore
+                              pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                            }
                           }
-                        }
-                      }, 1500);
-                    }, 750);
-                  },1000);
-                }
-              } else {
-                // @ts-ignore
-                let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                botones.forEach(element => element.disabled = false);
-                // @ts-ignore
-                let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                for (let index = 0; index < pokeBotones.length; index++) {
-                  // @ts-ignore
-                  pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                }
-              }
-            }, 3300);
-          } else {
-            setTimeout(() => {
-              this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
-              setTimeout(() => {
-                this.actualizarBarraContra(data.danioAction1);
-                setTimeout(() => {
-                  // @ts-ignore
-                  if (this.pokeContraActivo.saludActual <= 0) {
-                    console.log("derrotado");
-                    this.debilitado = true;
-                    // @ts-ignore
-                    this.chatService.setPokeIsDown(this.roomId, this.userId);
+                        }, 1500);
+                      }, 750);
+                    }, 1000);
                   }
-                }, 1500);
-              }, 750);
-            }, 1000);
-            setTimeout(() => {
-              if (!this.debilitado) {
-                this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+                } else {
+                  // @ts-ignore
+                  let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                  botones.forEach(element => element.disabled = false);
+                  // @ts-ignore
+                  let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                  for (let index = 0; index < pokeBotones.length; index++) {
+                    // @ts-ignore
+                    pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                  }
+                }
+              }, 3300);
+            } else {
+              setTimeout(() => {
+                this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
                 setTimeout(() => {
-                  this.actualizarBarraUser(data.danioAction2);
+                  this.actualizarBarraContra(data.danioAction1);
                   setTimeout(() => {
                     // @ts-ignore
-                    if (this.pokeActivo.saludActual <= 0) {
-                      // @ts-ignore
-                      this.pokeActivo.derrotado = true;
+                    if (this.pokeContraActivo.saludActual <= 0) {
                       console.log("derrotado");
-                      /*FALTA AÑADIR ANIMACION SALIDA*/
                       this.debilitado = true;
                       // @ts-ignore
-                      this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
-                      // @ts-ignore
-                      let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                      botones.forEach(element => element.disabled = true);
-                      // @ts-ignore
-                      let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                      for (let index = 0; index < pokeBotones.length; index++) {
-                        // @ts-ignore
-                        pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                      }
-                    } else {
-                      // @ts-ignore
-                      let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                      botones.forEach(element => element.disabled = false);
-                      // @ts-ignore
-                      let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                      for (let index = 0; index < pokeBotones.length; index++) {
-                        // @ts-ignore
-                        pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                      }
+                      this.chatService.setPokeIsDown(this.roomId, this.userId);
                     }
                   }, 1500);
                 }, 750);
-              }
-            }, 3300)
+              }, 1000);
+              setTimeout(() => {
+                if (!this.debilitado) {
+                  this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+                  setTimeout(() => {
+                    this.actualizarBarraUser(data.danioAction2);
+                    setTimeout(() => {
+                      // @ts-ignore
+                      if (this.pokeActivo.saludActual <= 0) {
+                        // @ts-ignore
+                        this.pokeActivo.derrotado = true;
+                        console.log("derrotado");
+                        /*FALTA AÑADIR ANIMACION SALIDA*/
+                        this.debilitado = true;
+                        // @ts-ignore
+                        this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
+                        // @ts-ignore
+                        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                        botones.forEach(element => element.disabled = true);
+                        // @ts-ignore
+                        let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                        for (let index = 0; index < pokeBotones.length; index++) {
+                          // @ts-ignore
+                          pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                        }
+                        this.checkPokes();
+                      } else {
+                        // @ts-ignore
+                        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                        botones.forEach(element => element.disabled = false);
+                        // @ts-ignore
+                        let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                        for (let index = 0; index < pokeBotones.length; index++) {
+                          // @ts-ignore
+                          pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                        }
+                      }
+                    }, 1500);
+                  }, 750);
+                }
+              }, 3300)
+            }
           }
         } else {
-          if (data.action2.includes("esperar")) {
-            setTimeout(() => {
-              this.debilitado= false;
-              this.restartAnimation(pokeActivoContra, "moverPokeOut 0.5s linear");
-              // @ts-ignore
-              this.pokeContraActivo = this.equipoActivoContra[data.danioAction1];
-              // @ts-ignore
-              this.animarBarra(this.pokeContraActivo.saludActual, this.pokeContraActivo.hp, ".psContra", 0);
-              setTimeout(() => {
-                pokeActivoContra.style.backgroundSize = "100% 0";
-                this.lanzarPokeballContra();
-                setTimeout(() => {
-                  // @ts-ignore
-                  pokeActivoContra.style.backgroundImage = 'url("/assets/OnBattle/front/' + this.equipoActivoContra[data.danioAction1].id + '.png")';
-                  this.restartAnimation(pokeActivoContra, "moverPokeIn 0.5s linear");
-                  setTimeout(() => {
-                    pokeActivoContra.style.backgroundSize = "100% 100%";
-                  }, 500);
-                }, 1250);
-              }, 500);
-            }, 1000);
+          if(data.action2.includes("perder")){
+            this.executeActions(data.action2);
             setTimeout(()=>{
-              // @ts-ignore
-              let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-              botones.forEach(element => element.disabled = false);
-              // @ts-ignore
-              let arrayBotones = document.querySelectorAll('.pokeBoton') as NodeListOf<HTMLButtonElement>;
-              for (let index = 0; index < Array.from(arrayBotones).length; index++) {
-                // @ts-ignore
-                Array.from(arrayBotones)[index].disabled = this.equipoActivo[index].deshabilitado;
-              }
-            },3300);
-          } else {
-            /*******************************************************************jugador 2 ****************************************************************************************************************/
-            if (data.action1.includes("cambio")) {
-              this.debilitado = false;
+              this.router.navigate(["/combate"]);         
+            },2000);            
+          }else{
+            if (data.action2.includes("esperar")) {
               setTimeout(() => {
+                this.debilitado = false;
                 this.restartAnimation(pokeActivoContra, "moverPokeOut 0.5s linear");
                 // @ts-ignore
                 this.pokeContraActivo = this.equipoActivoContra[data.danioAction1];
@@ -483,125 +465,131 @@ export class CombateComponent implements OnInit, OnDestroy {
                 }, 500);
               }, 1000);
               setTimeout(() => {
-                if (data.action2.includes("cambio")) {
-                  this.debilitado = false;
-                  this.executeActions(data.action2);
-                  setTimeout(() => {
-                    this.restartAnimation(pokeActivoUser, "moverPokeOut 0.5s linear");
-                    setTimeout(() => {
-                      pokeActivoUser.style.backgroundSize = "100% 0";
-                      // @ts-ignore
-                      this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
-                      // @ts-ignore
-                      this.pokeActivo = this.equipoActivo[data.danioAction2];
-                      this.servicePokemon.movimientosPokemon(this.pokeActivo.id).subscribe(movData => {
-                        this.movimientos = movData;
-                        // @ts-ignore
-                        this.animarBarra(this.pokeActivo.saludActual, this.pokeActivo.hp, ".psUser", 0);
-                        this.lanzarPokeballUser();
-                        setTimeout(() => {
-                          // @ts-ignore
-                          pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.equipoActivo[data.danioAction2].id + '.png")';
-                          this.restartAnimation(pokeActivoUser, "moverPokeIn 0.5s linear");
-                          setTimeout(() => {
-                            // @ts-ignore
-                            this.pokeActivo.deshabilitado = true;
-                            pokeActivoUser.style.backgroundSize = "100% 100%";
-                            // @ts-ignore
-                            let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                            botones.forEach(element => element.disabled = false);
-                            // @ts-ignore
-                            let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                            for (let index = 0; index < pokeBotones.length; index++) {
-                              // @ts-ignore
-                              pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                            }
-                          }, 500);
-                        }, 1250);
-                      });
-                    }, 500)
-                  }, 1000);
-                } else {
-                  this.executeActions(data.action2);
-                  this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
-                  setTimeout(() => {
-                    this.actualizarBarraContra(data.danioAction2);
-                    setTimeout(() => {
-                      // @ts-ignore
-                      if (this.pokeContraActivo.saludActual <= 0) {
-                        console.log("derrotado");
-                        this.debilitado = true;
-                        // @ts-ignore
-                        this.chatService.setPokeIsDown(this.roomId, this.userId);
-                        // @ts-ignore
-                        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                        botones.forEach(element => element.disabled = true);
-                        // @ts-ignore
-                        let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                        for (let index = 0; index < pokeBotones.length; index++) {
-                          // @ts-ignore
-                          pokeBotones[index].disabled = true;
-                        }
-                      } else {
-                        // @ts-ignore
-                        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                        botones.forEach(element => element.disabled = false);
-                        // @ts-ignore
-                        let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                        for (let index = 0; index < pokeBotones.length; index++) {
-                          // @ts-ignore
-                          pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                        }
-                      }
-                    }, 1500)
-                  }, 750);
+                // @ts-ignore
+                let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                botones.forEach(element => element.disabled = false);
+                // @ts-ignore
+                let arrayBotones = document.querySelectorAll('.pokeBoton') as NodeListOf<HTMLButtonElement>;
+                for (let index = 0; index < Array.from(arrayBotones).length; index++) {
+                  // @ts-ignore
+                  Array.from(arrayBotones)[index].disabled = this.equipoActivo[index].deshabilitado;
                 }
               }, 3300);
             } else {
-              setTimeout(() => {
-                if (pokeActivoUser) {
-                  this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
-                }
+              /*******************************************************************jugador 2 ****************************************************************************************************************/
+              if (data.action1.includes("cambio")) {
+                this.debilitado = false;
                 setTimeout(() => {
-                  this.actualizarBarraUser(data.danioAction1);
+                  this.restartAnimation(pokeActivoContra, "moverPokeOut 0.5s linear");
+                  // @ts-ignore
+                  this.pokeContraActivo = this.equipoActivoContra[data.danioAction1];
+                  // @ts-ignore
+                  this.animarBarra(this.pokeContraActivo.saludActual, this.pokeContraActivo.hp, ".psContra", 0);
                   setTimeout(() => {
-                    // @ts-ignore
-                    if (this.pokeActivo.saludActual <= 0) {
-                      // @ts-ignore
-                      this.pokeActivo.derrotado = true;
-                      console.log("derrotado");
-                      /*FALTA AÑADIR ANIMACION SALIDA*/
-                      this.debilitado = true;
-                      // @ts-ignore
-                      this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
-                      // @ts-ignore
-                      let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                      botones.forEach(element => element.disabled = true);
-                      // @ts-ignore
-                      let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                      for (let index = 0; index < pokeBotones.length; index++) {
-                        // @ts-ignore
-                        pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
-                      }
-                    }
-                  }, 1500);
-                }, 750);
-              }, 1000);
-              setTimeout(() => {
-                if (!this.debilitado) {
-                  this.executeActions(data.action2);
-                  if (this.pokeContraActivo) {
-                    this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
-                  }
-                  setTimeout(() => {
-                    this.actualizarBarraContra(data.danioAction2);
+                    pokeActivoContra.style.backgroundSize = "100% 0";
+                    this.lanzarPokeballContra();
                     setTimeout(() => {
                       // @ts-ignore
-                      if (this.pokeContraActivo.saludActual <= 0) {
+                      pokeActivoContra.style.backgroundImage = 'url("/assets/OnBattle/front/' + this.equipoActivoContra[data.danioAction1].id + '.png")';
+                      this.restartAnimation(pokeActivoContra, "moverPokeIn 0.5s linear");
+                      setTimeout(() => {
+                        pokeActivoContra.style.backgroundSize = "100% 100%";
+                      }, 500);
+                    }, 1250);
+                  }, 500);
+                }, 1000);
+                setTimeout(() => {
+                  if (data.action2.includes("cambio")) {
+                    this.debilitado = false;
+                    this.executeActions(data.action2);
+                    setTimeout(() => {
+                      this.restartAnimation(pokeActivoUser, "moverPokeOut 0.5s linear");
+                      setTimeout(() => {
+                        pokeActivoUser.style.backgroundSize = "100% 0";
+                        // @ts-ignore
+                        this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
+                        // @ts-ignore
+                        this.pokeActivo = this.equipoActivo[data.danioAction2];
+                        this.servicePokemon.movimientosPokemon(this.pokeActivo.id).subscribe(movData => {
+                          this.movimientos = movData;
+                          // @ts-ignore
+                          this.animarBarra(this.pokeActivo.saludActual, this.pokeActivo.hp, ".psUser", 0);
+                          this.lanzarPokeballUser();
+                          setTimeout(() => {
+                            // @ts-ignore
+                            pokeActivoUser.style.backgroundImage = 'url("/assets/OnBattle/back/' + this.equipoActivo[data.danioAction2].id + '.png")';
+                            this.restartAnimation(pokeActivoUser, "moverPokeIn 0.5s linear");
+                            setTimeout(() => {
+                              // @ts-ignore
+                              this.pokeActivo.deshabilitado = true;
+                              pokeActivoUser.style.backgroundSize = "100% 100%";
+                              // @ts-ignore
+                              let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                              botones.forEach(element => element.disabled = false);
+                              // @ts-ignore
+                              let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                              for (let index = 0; index < pokeBotones.length; index++) {
+                                // @ts-ignore
+                                pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                              }
+                            }, 500);
+                          }, 1250);
+                        });
+                      }, 500)
+                    }, 1000);
+                  } else {
+                    this.executeActions(data.action2);
+                    this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+                    setTimeout(() => {
+                      this.actualizarBarraContra(data.danioAction2);
+                      setTimeout(() => {
+                        // @ts-ignore
+                        if (this.pokeContraActivo.saludActual <= 0) {
+                          console.log("derrotado");
+                          this.debilitado = true;
+                          // @ts-ignore
+                          this.chatService.setPokeIsDown(this.roomId, this.userId);
+                          // @ts-ignore
+                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                          botones.forEach(element => element.disabled = true);
+                          // @ts-ignore
+                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                          for (let index = 0; index < pokeBotones.length; index++) {
+                            // @ts-ignore
+                            pokeBotones[index].disabled = true;
+                          }
+                        } else {
+                          // @ts-ignore
+                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                          botones.forEach(element => element.disabled = false);
+                          // @ts-ignore
+                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                          for (let index = 0; index < pokeBotones.length; index++) {
+                            // @ts-ignore
+                            pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                          }
+                        }
+                      }, 1500)
+                    }, 750);
+                  }
+                }, 3300);
+              } else {
+                setTimeout(() => {
+                  if (pokeActivoUser) {
+                    this.restartAnimation(pokeActivoUser, "hitPoke 0.75s linear");
+                  }
+                  setTimeout(() => {
+                    this.actualizarBarraUser(data.danioAction1);
+                    setTimeout(() => {
+                      // @ts-ignore
+                      if (this.pokeActivo.saludActual <= 0) {
+                        // @ts-ignore
+                        this.pokeActivo.derrotado = true;
                         console.log("derrotado");
+                        /*FALTA AÑADIR ANIMACION SALIDA*/
                         this.debilitado = true;
                         // @ts-ignore
-                        this.chatService.setPokeIsDown(this.roomId, this.userId);
+                        this.pokeActivo.deshabilitado = this.pokeActivo.derrotado;
                         // @ts-ignore
                         let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
                         botones.forEach(element => element.disabled = true);
@@ -609,39 +597,55 @@ export class CombateComponent implements OnInit, OnDestroy {
                         let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
                         for (let index = 0; index < pokeBotones.length; index++) {
                           // @ts-ignore
-                          pokeBotones[index].disabled = true;
-                        }
-                      } else {
-                        // @ts-ignore
-                        let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-                        botones.forEach(element => element.disabled = false);
-                        // @ts-ignore
-                        let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-                        for (let index = 0; index < pokeBotones.length; index++) {
-                          // @ts-ignore
                           pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
                         }
+                        this.checkPokes();
                       }
-                    }, 1500)
+                    }, 1500);
                   }, 750);
-                }
-              }, 3300);
+                }, 1000);
+                setTimeout(() => {
+                  if (!this.debilitado) {
+                    this.executeActions(data.action2);
+                    if (this.pokeContraActivo) {
+                      this.restartAnimation(pokeActivoContra, "hitPoke 0.75s linear");
+                    }
+                    setTimeout(() => {
+                      this.actualizarBarraContra(data.danioAction2);
+                      setTimeout(() => {
+                        // @ts-ignore
+                        if (this.pokeContraActivo.saludActual <= 0) {
+                          console.log("derrotado");
+                          this.debilitado = true;
+                          // @ts-ignore
+                          this.chatService.setPokeIsDown(this.roomId, this.userId);
+                          // @ts-ignore
+                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                          botones.forEach(element => element.disabled = true);
+                          // @ts-ignore
+                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                          for (let index = 0; index < pokeBotones.length; index++) {
+                            // @ts-ignore
+                            pokeBotones[index].disabled = true;
+                          }
+                        } else {
+                          // @ts-ignore
+                          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
+                          botones.forEach(element => element.disabled = false);
+                          // @ts-ignore
+                          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
+                          for (let index = 0; index < pokeBotones.length; index++) {
+                            // @ts-ignore
+                            pokeBotones[index].disabled = this.equipoActivo[index].deshabilitado;
+                          }
+                        }
+                      }, 1500)
+                    }, 750);
+                  }
+                }, 3300);
+              }
             }
           }
-        }
-
-        // @ts-ignore
-        if(this.equipoActivo[0].derrotado && this.equipoActivo[1].derrotado && this.equipoActivo[2].derrotado && this.equipoActivo[3].derrotado && this.equipoActivo[4].derrotado && this.equipoActivo[5].derrotado){
-          // @ts-ignore
-          let botones = document.querySelectorAll('.botones') as HTMLButtonElement[];
-          botones.forEach(element => element.disabled = true);
-          // @ts-ignore
-          let pokeBotones = document.querySelectorAll('.pokeBoton') as HTMLButtonElement[];
-          for (let index = 0; index < pokeBotones.length; index++) {
-            // @ts-ignore
-            pokeBotones[index].disabled = true;
-          }
-          this.chatService.sendServerMessage(this.roomId,"El perdedor es: " + this.userId)
         }
       });
     }
@@ -871,15 +875,27 @@ export class CombateComponent implements OnInit, OnDestroy {
       this.chatService.setPokeIsDown(this.roomId, this.userId);
       // @ts-ignore
       this.pokeActivo.deshabilitado = true;
-    } else {
+    } else if(action.includes("ganar")){
+      this.serverMessage = `${this.userId} ha ganado`;
+      this.chatService.sendServerMessage(this.roomId, this.serverMessage);
+    } else if(action.includes("perder")){
+      this.serverMessage = `${this.userId} ha perdido`;
+      this.chatService.sendServerMessage(this.roomId, this.serverMessage);
+    }
+      else{
       this.serverMessage = `${this.userId} ha utilizado ${action}`;
       this.chatService.sendServerMessage(this.roomId, this.serverMessage);
     }
   }
 
-  derrotarPoke(pokeIdArray: number) {
+  checkPokes() {
     // @ts-ignore
-    this.equipoActivo[pokeIdArray].disabled = true;
+    if (this.equipoActivo[0].derrotado && this.equipoActivo[1].derrotado && this.equipoActivo[2].derrotado && this.equipoActivo[3].derrotado && this.equipoActivo[4].derrotado && this.equipoActivo[5].derrotado) {
+      // @ts-ignore
+      this.chatService.sendAction(this.userId, "perdedor", -9999, this.roomId, -9999);
+      // @ts-ignore
+      this.chatService.sendAction(this.userId, "perdedor", -999, this.roomId, -999);
+    }
   }
 
   lanzarPokeballs() {
@@ -931,7 +947,7 @@ export class CombateComponent implements OnInit, OnDestroy {
       this.actionSubscription.unsubscribe();
       this.actionSubscription = undefined;
     }
-    if(this.getPokeActivos){
+    if (this.getPokeActivos) {
       this.getPokeActivos.unsubscribe();
       this.getPokeActivos = undefined;
     }

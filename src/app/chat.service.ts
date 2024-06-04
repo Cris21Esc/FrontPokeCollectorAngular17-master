@@ -25,7 +25,7 @@ export class ChatService {
     this.socket.emit('message', data);
   }
 
-  sendAction(userId: string,action:string,danio:number,room:string,pokeActivoVel:number):void{
+  sendAction(userId: string,action:string,danio:number,room:string,pokeActivoVel:number):void{    
     const data = { userId:userId,action:action,danio:danio,room:room,vel:pokeActivoVel};
     this.socket.emit('recibirAccion',data);
   }

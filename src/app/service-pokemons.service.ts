@@ -31,6 +31,15 @@ export class ServicepokemonsService {
 
   }
 
+  setWinnerAndLoser(idUserGanador:string,idUserPerdedor:string){
+    /* this.findUserIdByNombre(idUserGanador).subscribe((userGanadorID)=>{
+      this.findUserIdByNombre(idUserPerdedor).subscribe((userPerdedorID)=>{ 
+        console.log("envio datos")       
+        return this.httpClient.post<any>(`${this.baseURL}/setWinnersAndLosers`,{ganador:userGanadorID,perdedor:userPerdedorID})
+      });
+    }); */
+  }
+
   obteneruserPokemons(nombre:string|null):Observable<string[]>{
     return this.httpClient.get<string[]>(`${this.baseURL}/users/pokemons?username=${nombre}`);
   }

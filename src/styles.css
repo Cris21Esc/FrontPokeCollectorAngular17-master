@@ -5,7 +5,16 @@ body{
   background-image: url('assets/fondo/fondo.jpg');
   background-size: auto;
   background-repeat: repeat-x repeat-y;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
+.content-wrapper {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
 }
 
 body.black-background {

@@ -20,19 +20,6 @@
   </div>
   <button class="btn btn-outline-success" *ngIf="pokesInEquipo==6" (click)="guardarEquipo()">Guardar equipo Pokemon</button>
 </div>
-<!--<div class="row mx-0 p-5" *ngIf="equipos.length >= 1">
-  <div class="equipos" *ngFor="let equipo of equipos">
-    <h2>Equipo: {{equipo.nombre}}</h2>
-    <div class="imgsPokes">
-      <img [src]="'/assets/gifs/' + equipo.pokemon1_id + '.gif'" loading="lazy">
-      <img [src]="'/assets/gifs/' + equipo.pokemon2_id + '.gif'" loading="lazy">
-      <img [src]="'/assets/gifs/' + equipo.pokemon3_id + '.gif'" loading="lazy">
-      <img [src]="'/assets/gifs/' + equipo.pokemon4_id + '.gif'" loading="lazy">
-      <img [src]="'/assets/gifs/' + equipo.pokemon5_id + '.gif'" loading="lazy">
-      <img [src]="'/assets/gifs/' + equipo.pokemon6_id + '.gif'" loading="lazy">
-    </div>
-  </div>
-</div>-->
 <div class="pokemon-team">
   <div class="w-100 text-center" *ngIf="!toggle">
     <label for="nomEquipo" class="text-white me-3">Nombre del equipo pokemon:</label>
@@ -58,4 +45,3 @@
   </div>
 </div>
 </body>
-<app-footer></app-footer>

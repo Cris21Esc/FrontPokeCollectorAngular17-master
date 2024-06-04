@@ -133,13 +133,21 @@ io.on('connection', (socket) => {
   });
 
   socket.on('recibirAccion', (data) => {
-    console.log(data);
     const {userId, action, danio,room, vel} = data;
+    const perdedor = room.split("-");
     if (rooms[room].actions.length > 0) {
       if(rooms[room].actions[0].vel > data.vel){
         io.to(room).emit('enviarAccion',{room:room,user1:rooms[room].actions[0].userId,user2:data.userId,action1:rooms[room].actions[0].action,danioAction1:rooms[room].actions[0].danio,action2:data.action,danioAction2:data.danio});
       }else if(rooms[room].actions[0].vel < data.vel){
-        io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,danioAction2:rooms[room].actions[0].danio,action1:data.action,danioAction1:data.danio});
+        if(data.action.includes("perdedor")){
+          if(data.userId === perdedor[0]){
+            io.to(room).emit('enviarAccion',{room:room,user2:perdedor[0],user1:perdedor[1],action2:"perder",danioAction2:0,action1:"ganar",danioAction1:0});
+          }else{
+            io.to(room).emit('enviarAccion',{room:room,user2:perdedor[1],user1:perdedor[0],action2:"perder",danioAction2:0,action1:"ganar",danioAction1:0});
+          }         
+        }else{
+          io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,danioAction2:rooms[room].actions[0].danio,action1:data.action,danioAction1:data.danio});
+        }        
       }else if(rooms[room].actions[0].vel === data.vel){
         let numRandom = Math.floor(Math.random() * 2);
         if (numRandom === 0){
@@ -153,7 +161,8 @@ io.on('connection', (socket) => {
     } else {
       if(action.includes("cambio")){
         rooms[room].actions.push({userId,action,danio,room,vel:9999});
-      }else{
+      }
+      else{
         rooms[room].actions.push({userId,action,danio,room,vel});
       }
     }
