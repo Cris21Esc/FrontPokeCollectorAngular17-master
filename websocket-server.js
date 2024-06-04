@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'https://pokecollector-p0k3.web.app/',
+    origin: 'http://localhost:4200',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
@@ -158,7 +158,7 @@ io.on('connection', (socket) => {
       }
     }
   });
-  
+
   socket.on('setPokeActivo',(data)=>{
     const {roomId,userId,pokeActivoId,equipoActivo} = data;
     if(rooms[roomId].pokesActivos.length > 0){
