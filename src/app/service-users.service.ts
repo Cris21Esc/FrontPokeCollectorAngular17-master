@@ -81,7 +81,7 @@ export class ServiceusersService {
 
   handleLogin(response: any): void {
     this.setAuthToken(response.token);
-    this.isLoggedInSubject.next(true); 
+    this.isLoggedInSubject.next(true);
   }
 
   handleLoginError(error: any): void {
