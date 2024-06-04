@@ -7,8 +7,8 @@ const app = express();
 
 // Cargar los certificados SSL
 const options = {
-  key: fs.readFileSync('/home/ubuntu/ws/FrontPokeCollectorAngular17-master/private.key'),  // Ruta a tu clave privada
-  cert: fs.readFileSync('/home/ubuntu/ws/FrontPokeCollectorAngular17-master/certificate.crt')  // Ruta a tu certificado
+  key: fs.readFileSync('/home/ubuntu/ws/FrontPokeCollectorAngular17-master/apache.key'),  // Ruta a tu clave privada
+  cert: fs.readFileSync('/home/ubuntu/ws/FrontPokeCollectorAngular17-master/apache.crt')  // Ruta a tu certificado
 };
 
 const server = https.createServer(options, app);
