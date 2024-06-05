@@ -64,8 +64,7 @@ io.on('connection', (socket) => {
         users: [opponent.userId, userId],
         messages: [],
         actions:[],
-        pokesActivos: [],
-        pokeDown: false
+        pokesActivos: []
       };
 
       io.to(roomId).emit('found-opponent', {roomId, users: rooms[roomId].users});
