@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
-    origin: 'http://localhost:4200',
+    origin: 'http://localhost',
     methods: ['GET', 'POST'],
     allowedHeaders: ['Content-Type'],
     credentials: true
