@@ -143,10 +143,10 @@ io.on('connection', (socket) => {
             io.to(room).emit('enviarAccion',{room:room,user2:perdedor[0],user1:perdedor[1],action2:"perder",danioAction2:0,action1:"ganar",danioAction1:0});
           }else{
             io.to(room).emit('enviarAccion',{room:room,user2:perdedor[1],user1:perdedor[0],action2:"perder",danioAction2:0,action1:"ganar",danioAction1:0});
-          }         
+          }
         }else{
           io.to(room).emit('enviarAccion',{room:room,user2:rooms[room].actions[0].userId,user1:data.userId,action2:rooms[room].actions[0].action,danioAction2:rooms[room].actions[0].danio,action1:data.action,danioAction1:data.danio});
-        }        
+        }
       }else if(rooms[room].actions[0].vel === data.vel){
         let numRandom = Math.floor(Math.random() * 2);
         if (numRandom === 0){
